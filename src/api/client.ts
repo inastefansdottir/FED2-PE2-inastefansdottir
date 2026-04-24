@@ -1,4 +1,5 @@
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_KEY = import.meta.env.VITE_API_KEY;
 
 export async function apiRequest<T>(
   endpoint: string,
@@ -9,6 +10,7 @@ export async function apiRequest<T>(
 
   const headers: HeadersInit = {
     "Content-Type": "application/json",
+    "X-Noroff-API-Key": API_KEY,
     ...(user?.accessToken && {
       Authorization: `Bearer ${user.accessToken}`,
     }),
