@@ -15,9 +15,6 @@ export default {
         heading: ["Gloock", "serif"],
         body: ["Lexend", "system-ui", "sans-serif"],
       },
-      dropShadow: {
-        xl: "0 4px 20px rgba(0, 255, 0, 0.10)",
-      },
     },
   },
   plugins: [],
