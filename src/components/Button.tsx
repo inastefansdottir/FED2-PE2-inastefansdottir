@@ -11,7 +11,7 @@ const base =
 
 const variants = {
   primary: "bg-primary hover:bg-secondary",
-  smallPrimary: "bg-primary hover:bg-accent",
+  smallPrimary: "bg-primary hover:text-secondary hover:bg-accent",
   secondary: "bg-secondary hover:bg-body",
   light: "bg-background text-secondary hover:bg-accent",
   disabled: "bg-primary text-accent",

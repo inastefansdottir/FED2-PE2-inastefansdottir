@@ -9,10 +9,14 @@ export default {
         brownDark: "#ab9072",
         brownLight: "#e0d7ce",
         background: "#f7f9f9",
+        error: "#d96e70",
       },
       fontFamily: {
         heading: ["Gloock", "serif"],
         body: ["Lexend", "system-ui", "sans-serif"],
+      },
+      dropShadow: {
+        xl: "0 4px 20px rgba(0, 255, 0, 0.10)",
       },
     },
   },
