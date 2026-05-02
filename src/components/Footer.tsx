@@ -1,10 +1,9 @@
 import { Link } from "react-router-dom";
-import { Button } from "./Button";
 import logoGreen from "../assets/logo-green.svg";
 
 function Footer() {
   return (
-    <div className="flex justify-center bg-brownLight text-secondary">
+    <div className="flex justify-center bg-brownLight text-secondary px-10">
       <div className="flex justify-between max-w-[1300px] w-full pt-9 pb-16">
         <div>
           <img src={logoGreen} />
