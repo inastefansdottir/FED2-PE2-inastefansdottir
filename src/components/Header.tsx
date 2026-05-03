@@ -4,7 +4,7 @@ import logo from "../assets/logo-white.svg";
 
 function Header() {
   return (
-    <div className="flex justify-center bg-secondary w-full sticky top-0 px-10">
+    <div className="flex justify-center bg-secondary w-full sticky top-0 px-10 z-30">
       <nav className="flex justify-between items-center w-full max-w-[1300px] py-2.5">
         <NavLink to={"/"}>
           <img src={logo} alt="Holidaze logo white" />

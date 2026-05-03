@@ -2,7 +2,7 @@ import { apiRequest } from "./client";
 import type { User } from "../types/user";
 
 export async function login(email: string, password: string) {
-  const res = await apiRequest<{ data: User }>("/auth/login", {
+  const res = await apiRequest<{ data: User }>("/auth/login?_holidaze=true", {
     method: "POST",
     body: JSON.stringify({ email, password }),
   });
