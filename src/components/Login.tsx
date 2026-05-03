@@ -2,6 +2,7 @@ import { login } from "../api/auth";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "./Button";
+import { useAuth } from "../context/AuthContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 
@@ -10,6 +11,7 @@ type Props = {
 };
 
 export default function LoginModal({ onClose }: Props) {
+  const { loginUser } = useAuth();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -69,7 +71,8 @@ export default function LoginModal({ onClose }: Props) {
 
     try {
       setLoading(true);
-      await login(formData.email, formData.password);
+      const userData = await login(formData.email, formData.password);
+      loginUser(userData);
       onClose();
     } catch (err: any) {
       setApiError(err.message);

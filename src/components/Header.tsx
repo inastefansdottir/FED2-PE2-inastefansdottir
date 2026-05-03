@@ -1,12 +1,12 @@
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
 import { Button } from "./Button";
+import { useAuth } from "../context/AuthContext";
 import LoginModal from "./Login";
 import logo from "../assets/logo-white.svg";
 
 function Header() {
-  const storedUser = localStorage.getItem("user");
-  const user = storedUser ? JSON.parse(storedUser) : null;
+  const { user } = useAuth();
 
   const [showLogin, setShowLogin] = useState(false);
 
