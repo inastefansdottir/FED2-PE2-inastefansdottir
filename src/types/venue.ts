@@ -2,7 +2,10 @@ export interface Venue {
   id: string;
   name: string;
   description: string;
-  media: string[];
+  media: string[{
+    url: string;
+    alt: string;
+  }];
   price: number;
   maxGuests: number;
   rating: number;

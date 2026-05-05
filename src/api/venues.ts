@@ -1,8 +1,11 @@
 import { apiRequest } from "./client";
+import type { ApiResponse } from "../types/api";
 import type { Venue, CreateVenueData } from "../types/venue";
 
-export function getVenues(page = 1, limit = 10): Promise<Venue[]> {
-  return apiRequest<Venue[]>(`/holidaze/venues?page=${page}&limit=${limit}`);
+export function getVenues(page = 1, limit = 10): Promise<ApiResponse<Venue[]>> {
+  return apiRequest<ApiResponse<Venue[]>>(
+    `/holidaze/venues?page=${page}&limit=${limit}`
+  );
 }
 
 export function getVenueById(id: string): Promise<Venue> {
