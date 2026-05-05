@@ -19,8 +19,12 @@ function VenueCard({
       className=" bg-white shadow-lg rounded-[20px] max-w-[303px] w-full overflow-hidden min-h-[380px] flex flex-col transition-all duration-200 ease-out
 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-2xl"
     >
-      <div className="w-full aspect-[3/2] bg-brownLight">
-        <img src={image} alt={alt} className="w-full h-full object-cover" />
+      <div>
+        <img
+          src={image}
+          alt={alt}
+          className="w-full aspect-[3/2] bg-brownLight object-cover w-full h-full"
+        />
       </div>
       <div className="flex flex-col p-5 flex-1 justify-between">
         <div>

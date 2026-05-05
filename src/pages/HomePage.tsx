@@ -1,29 +1,32 @@
 import { useEffect, useState } from "react";
 import { getVenues } from "../api/venues";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import VenueCard from "../components/VenueCard";
 import heroImage from "../assets/hero-image.png";
 
 function HomePage() {
   const [venues, setVenues] = useState([]);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     async function fetchVenues() {
       try {
-        const data = await getVenues();
-        setVenues(data.data);
+        const response = await getVenues(page, 40);
+        setVenues((prev) => [...prev, ...response.data]);
       } catch (error) {
         console.error(error);
       }
     }
 
     fetchVenues();
-  }, []);
+  }, [page]);
 
   return (
-    <div>
-      <img src={heroImage} />
-      <div className="px-10 mt-[130px] mb-[85px]">
-        <div className="max-w-[1300px] w-full grid xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-[30px]">
+    <div className="flex flex-col">
+      <img src={heroImage} className="w-full h-[500px] object-cover" />
+      <div className="flex justify-center px-10 mt-[130px] mb-[85px]">
+        <div className=" grid xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-[30px]">
           {venues.map((venue) => (
             <VenueCard
               key={venue.id}
@@ -39,6 +42,16 @@ function HomePage() {
           ))}
         </div>
       </div>
+      <button
+        onClick={() => setPage((prev) => prev + 1)}
+        className="bg-primary rounded-full p-3 self-center hover:bg-secondary mb-[130px]"
+      >
+        <FontAwesomeIcon
+          icon={faPlus}
+          size="xl"
+          className="text-background w-[1em]"
+        />
+      </button>
     </div>
   );
 }
