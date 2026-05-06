@@ -6,6 +6,7 @@ export default {
         primary: "#558c91",
         secondary: "#285260",
         accent: "#b4d8d8",
+        body: "#1f2937",
         brownDark: "#ab9072",
         brownLight: "#e0d7ce",
         background: "#f7f9f9",

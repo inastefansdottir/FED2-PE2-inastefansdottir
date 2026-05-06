@@ -4,10 +4,37 @@
 
 body {
   font-family: "Lexend", system-ui, sans-serif;
+  color: #1f2937;
 }
 
 h1,
 h2,
 h3 {
   font-family: "Gloock", Georgia, "Times New Roman", Times, serif;
+}
+
+.rdp-range_end {
+  background: linear-gradient(90deg, #b4d8d8 50%, transparent 50%);
+}
+
+.rdp-range_start {
+  background: linear-gradient(90deg, transparent 50%, #b4d8d8 50%);
+}
+
+.rdp-range_start .rdp-day_button,
+.rdp-range_end .rdp-day_button {
+  background-color: #558c91;
+  border: #558c91;
+}
+
+.rdp-range_middle {
+  background: #b4d8d8;
+}
+
+.rdp-today:not(.rdp-outside) {
+  color: #558c91;
+}
+
+.rdp-chevron {
+  fill: #558c91;
 }

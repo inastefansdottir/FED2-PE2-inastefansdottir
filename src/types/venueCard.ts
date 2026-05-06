@@ -1,4 +1,4 @@
-export interface venueCardProps {
+export interface VenueCardProps {
   to: string;
   image: string;
   alt: string;

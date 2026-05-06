@@ -18,7 +18,7 @@ const variants = {
 };
 
 const sizes = {
-  big: "px-7 py-3.5 text-xl",
+  big: "px-7 py-3 text-xl",
   default: "px-6 py-3",
   small: "px-5 py-2.5 text-sm",
 };
