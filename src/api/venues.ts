@@ -4,16 +4,18 @@ import type { Venue, CreateVenueData } from "../types/venue";
 
 export function getVenues(page = 1, limit = 10): Promise<ApiResponse<Venue[]>> {
   return apiRequest<ApiResponse<Venue[]>>(
-    `/holidaze/venues?page=${page}&limit=${limit}`
+    `/holidaze/venues?page=${page}&limit=${limit}&_bookings=true`
   );
 }
 
 export function getVenueById(id: string): Promise<Venue> {
-  return apiRequest<Venue>(`(holidaze/venues/${id})`);
+  return apiRequest<Venue>(`holidaze/venues/${id}`);
 }
 
 export function searchVenues(query: string): Promise<Venue[]> {
-  return apiRequest<Venue[]>(`/holidaze/venues/search?q=${query}`);
+  return apiRequest<Venue[]>(
+    `/holidaze/venues/search?q=${encodeURIComponent(query)}`
+  );
 }
 
 export function createVenue(data: CreateVenueData) {

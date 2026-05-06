@@ -13,8 +13,21 @@ function HomePage() {
   const [venues, setVenues] = useState([]);
   const [page, setPage] = useState(1);
 
+  const [query, setQuery] = useState("");
+  const [guests, setGuests] = useState<number | "">("");
+  const [searchActive, setSearchActive] = useState(false);
+  const [filters, setFilters] = useState({
+    query: "",
+    guests: "" as number | "",
+    range: null,
+  });
+
   const [open, setOpen] = useState(false);
   const [range, setRange] = useState<any>();
+
+  const [allVenuesLoaded, setAllVenuesLoaded] = useState(false);
+
+  const [isSearchLoading, setIsSearchLoading] = useState(false);
 
   const calendarRef = useRef(null);
 
@@ -22,7 +35,19 @@ function HomePage() {
     async function fetchVenues() {
       try {
         const response = await getVenues(page, 40);
-        setVenues((prev) => [...prev, ...response.data]);
+
+        setVenues((prev) => {
+          const combined = [...prev, ...response.data];
+
+          return combined.filter(
+            (venue, index, self) =>
+              index === self.findIndex((v) => v.id === venue.id)
+          );
+        });
+
+        if (!response.meta.nextPage) {
+          setAllVenuesLoaded(true);
+        }
       } catch (error) {
         console.error(error);
       }
@@ -56,6 +81,76 @@ function HomePage() {
     };
   }, []);
 
+  const filteredVenues = searchActive
+    ? venues.filter((venue) => {
+        const q = (filters.query || "").toLowerCase();
+
+        const location = venue.location;
+
+        const fullLocation = `
+  ${location?.address || ""}
+  ${location?.city || ""}
+  ${location?.zip || ""}
+  ${location?.country || ""}
+  ${location?.continent || ""}
+`.toLowerCase();
+
+        const matchesLocation = fullLocation.includes(q);
+
+        const matchesGuests =
+          typeof filters.guests === "number"
+            ? venue.maxGuests >= filters.guests
+            : true;
+
+        let matchesDates = true;
+
+        if (filters.range?.from && filters.range?.to && venue.bookings) {
+          const from = new Date(filters.range.from);
+          const to = new Date(filters.range.to);
+
+          matchesDates = !venue.bookings.some((b) => {
+            const bf = new Date(b.dateFrom);
+            const bt = new Date(b.dateTo);
+
+            return from <= bt && to >= bf;
+          });
+        }
+
+        return matchesLocation && matchesGuests && matchesDates;
+      })
+    : venues;
+
+  useEffect(() => {
+    if (!searchActive) return;
+
+    if (!allVenuesLoaded) {
+      setIsSearchLoading(true);
+      setPage((prev) => prev + 1);
+    } else {
+      setIsSearchLoading(false);
+    }
+  }, [venues, searchActive, allVenuesLoaded]);
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+
+    setFilters({
+      query,
+      guests,
+      range,
+    });
+
+    setSearchActive(false);
+    setAllVenuesLoaded(false);
+    setVenues([]);
+    setPage(1);
+    setIsSearchLoading(true); // 👈 important
+
+    setTimeout(() => {
+      setSearchActive(true);
+    }, 0);
+  }
+
   return (
     <div className="relative flex flex-col">
       {/* Hero image */}
@@ -64,7 +159,7 @@ function HomePage() {
       {/* Search */}
       <div className="absolute left-1/2 -translate-x-1/2 top-[466px] px-10 max-w-[1000px] w-full">
         <div className="p-2 bg-white rounded-full shadow-lg ">
-          <form className="flex w-full justify-between">
+          <form onSubmit={handleSubmit} className="flex w-full justify-between">
             {/* Location */}
             <div className="flex flex-col flex-1 justify-center px-5 min-w-0">
               <label htmlFor="location" className="text-xs font-semibold">
@@ -75,6 +170,8 @@ function HomePage() {
                 name="location"
                 type="text"
                 placeholder="Search location"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
                 className="placeholder-primary pt-1"
               />
             </div>
@@ -119,13 +216,17 @@ function HomePage() {
                 name="guests"
                 type="number"
                 placeholder="Add guests"
+                value={guests}
+                onChange={(e) =>
+                  setGuests(e.target.value === "" ? "" : Number(e.target.value))
+                }
                 className="placeholder-primary pt-1"
               />
             </div>
 
             {/* Submit */}
             <div className="self-end">
-              <Button variant="secondary" size="big">
+              <Button type="submit" variant="secondary" size="big">
                 Search
               </Button>
             </div>
@@ -135,32 +236,40 @@ function HomePage() {
 
       {/* Venue card grid */}
       <div className="flex justify-center px-10 mt-[130px] mb-[85px]">
-        <div className=" grid xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-[30px]">
-          {venues.map((venue) => (
-            <VenueCard
-              key={venue.id}
-              to={`/venue/${venue.id}`}
-              image={venue.media?.[0]?.url}
-              alt={venue.media?.[0]?.alt}
-              title={venue.name}
-              rating={venue.rating}
-              city={venue.location.city}
-              country={venue.location.country}
-              price={venue.price}
-            />
-          ))}
-        </div>
+        {isSearchLoading ? (
+          <span className="loader"></span>
+        ) : (
+          <div className="grid xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-[30px]">
+            {filteredVenues.map((venue) => (
+              <VenueCard
+                key={venue.id}
+                to={`/venue/${venue.id}`}
+                image={venue.media?.[0]?.url}
+                alt={venue.media?.[0]?.alt}
+                title={venue.name}
+                rating={venue.rating}
+                city={venue.location.city}
+                country={venue.location.country}
+                guests={venue.maxGuests}
+                price={venue.price}
+              />
+            ))}
+          </div>
+        )}
       </div>
-      <button
-        onClick={() => setPage((prev) => prev + 1)}
-        className="bg-primary rounded-full p-3 self-center hover:bg-secondary mb-[130px]"
-      >
-        <FontAwesomeIcon
-          icon={faPlus}
-          size="xl"
-          className="text-background w-[1em]"
-        />
-      </button>
+
+      {!searchActive && (
+        <button
+          onClick={() => setPage((prev) => prev + 1)}
+          className="bg-primary rounded-full p-3 self-center hover:bg-secondary mb-[130px]"
+        >
+          <FontAwesomeIcon
+            icon={faPlus}
+            size="xl"
+            className="text-background w-[1em]"
+          />
+        </button>
+      )}
     </div>
   );
 }

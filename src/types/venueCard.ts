@@ -6,5 +6,6 @@ export interface VenueCardProps {
   rating: number;
   city: string;
   country: string;
+  guests: number;
   price: number;
 }

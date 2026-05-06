@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar, faLocationDot } from "@fortawesome/free-solid-svg-icons";
+import {
+  faStar,
+  faLocationDot,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
 import type { VenueCardProps } from "../types/venueCard";
 
 function VenueCard({
@@ -11,6 +15,7 @@ function VenueCard({
   rating,
   city,
   country,
+  guests,
   price,
 }: VenueCardProps) {
   return (
@@ -42,10 +47,16 @@ hover:-translate-y-1 hover:scale-[1.02] hover:shadow-2xl"
             </p>
           </div>
         </div>
-        <p className="text-primary text-right self-end">
-          <span className="font-semibold text-secondary">{price} NOK</span>
-          /Night
-        </p>
+        <div className="flex justify-between">
+          <div className="flex items-center gap-0.5 text-primary">
+            <FontAwesomeIcon icon={faUser} size="sm" />
+            <span>{guests}</span>
+          </div>
+          <p className="text-primary text-right">
+            <span className="font-semibold text-secondary">{price} NOK</span>
+            /Night
+          </p>
+        </div>
       </div>
     </Link>
   );
