@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
+import VenuePage from "./pages/VenuePage";
 import RegisterPage from "./pages/RegisterPage";
 import ProfilePage from "./pages/ProfilePage";
 import ProtectedRoute from "./routes/ProtectedRoute";
@@ -14,7 +15,7 @@ export default function App() {
       <main className="flex-1 flex justify-center items-center bg-background">
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/venue/:id" element={<h1>Specific Venue</h1>} />
+          <Route path="/venue/:id" element={<VenuePage />} />
           <Route path="/venue/edit/:id" element={<h1>Edit Venue</h1>} />
           <Route
             path="/register"
