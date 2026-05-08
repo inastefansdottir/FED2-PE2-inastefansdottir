@@ -8,8 +8,8 @@ export function getVenues(page = 1, limit = 10): Promise<ApiResponse<Venue[]>> {
   );
 }
 
-export function getVenueById(id: string): Promise<Venue> {
-  return apiRequest<Venue>(`holidaze/venues/${id}`);
+export function getVenueById(id: string): Promise<ApiResponse<Venue>> {
+  return apiRequest<ApiResponse<Venue>>(`/holidaze/venues/${id}?_owner=true`);
 }
 
 export function searchVenues(query: string): Promise<Venue[]> {

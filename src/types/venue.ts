@@ -26,6 +26,15 @@ export interface Venue {
     lat: number;
     lng: number;
   };
+  owner: {
+    name: string;
+    email: string;
+    bio: string;
+    avatar: {
+      url: string;
+      alt: string;
+    };
+  };
 }
 
 export interface CreateVenueData {
