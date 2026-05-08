@@ -125,31 +125,59 @@ function VenuePage() {
             </div>
             <ul className="grid gap-2 mt-[30px]">
               <li className="flex items-center">
-                <FontAwesomeIcon
-                  icon={faCircleCheck}
-                  className="text-primary mr-2"
-                />{" "}
+                {venue.meta.wifi ? (
+                  <FontAwesomeIcon
+                    icon={faCircleCheck}
+                    className="text-primary mr-2"
+                  />
+                ) : (
+                  <FontAwesomeIcon
+                    icon={faCircleXmark}
+                    className="text-error mr-2"
+                  />
+                )}
                 <p>Wifi</p>
               </li>
               <li className="flex items-center">
-                <FontAwesomeIcon
-                  icon={faCircleCheck}
-                  className="text-primary mr-2"
-                />{" "}
+                {venue.meta.wifi ? (
+                  <FontAwesomeIcon
+                    icon={faCircleCheck}
+                    className="text-primary mr-2"
+                  />
+                ) : (
+                  <FontAwesomeIcon
+                    icon={faCircleXmark}
+                    className="text-error mr-2"
+                  />
+                )}
                 <p>Parking</p>
               </li>
               <li className="flex items-center">
-                <FontAwesomeIcon
-                  icon={faCircleCheck}
-                  className="text-primary mr-2"
-                />{" "}
+                {venue.meta.wifi ? (
+                  <FontAwesomeIcon
+                    icon={faCircleCheck}
+                    className="text-primary mr-2"
+                  />
+                ) : (
+                  <FontAwesomeIcon
+                    icon={faCircleXmark}
+                    className="text-error mr-2"
+                  />
+                )}
                 <p>Breakfast</p>
               </li>
               <li className="flex items-center">
-                <FontAwesomeIcon
-                  icon={faCircleXmark}
-                  className="text-error mr-2"
-                />{" "}
+                {venue.meta.wifi ? (
+                  <FontAwesomeIcon
+                    icon={faCircleCheck}
+                    className="text-primary mr-2"
+                  />
+                ) : (
+                  <FontAwesomeIcon
+                    icon={faCircleXmark}
+                    className="text-error mr-2"
+                  />
+                )}
                 <p>Pets</p>
               </li>
             </ul>
