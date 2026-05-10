@@ -8,7 +8,7 @@ export function createBooking(data: CreateBooking) {
   });
 }
 
-export function deleteVenue(id: string) {
+export function deleteBooking(id: string) {
   return apiRequest(`/holidaze/bookings/${id}`, {
     method: "DELETE",
   });

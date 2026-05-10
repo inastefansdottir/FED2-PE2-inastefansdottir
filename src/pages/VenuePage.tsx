@@ -227,7 +227,7 @@ function VenuePage() {
             </ul>
           </section>
           {/* Booking */}
-          <div className="bg-white shadow-lg rounded-[30px] p-[35px] w-[413px]">
+          <div className="bg-white shadow-lg rounded-[30px] h-fit p-[35px] w-[413px]">
             {/* Booking form */}
             <form className="flex flex-col text-secondary gap-4">
               {/* Price */}

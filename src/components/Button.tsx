@@ -1,7 +1,13 @@
 import { Link } from "react-router-dom";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "smallPrimary" | "secondary" | "light" | "disabled";
+  variant?:
+    | "primary"
+    | "smallPrimary"
+    | "secondary"
+    | "light"
+    | "error"
+    | "disabled";
   size?: "big" | "default" | "small";
   to?: string; // for links
 }
@@ -14,6 +20,7 @@ const variants = {
   smallPrimary: "bg-primary hover:text-secondary hover:bg-accent",
   secondary: "bg-secondary hover:bg-body",
   light: "bg-background text-secondary hover:bg-accent",
+  error: "bg-error hover:bg-secondary",
   disabled: "bg-primary text-accent",
 };
 
