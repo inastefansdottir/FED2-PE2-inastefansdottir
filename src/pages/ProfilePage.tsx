@@ -10,8 +10,7 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 function ProfilePage() {
   const navigate = useNavigate();
-  const { logoutUser } = useAuth();
-  const { user } = useAuth();
+  const { user, loading, logoutUser } = useAuth();
 
   const [showEdit, setShowEdit] = useState(false);
   const [myVenues, setMyVenues] = useState([]);
@@ -24,7 +23,7 @@ function ProfilePage() {
 
   useEffect(() => {
     async function fetchVenues() {
-      if (!user.name) return;
+      if (!user?.name) return;
 
       try {
         const response = await getMyVenues(user.name);
@@ -36,11 +35,11 @@ function ProfilePage() {
     }
 
     fetchVenues();
-  }, [user.name]);
+  }, [user]);
 
   useEffect(() => {
     async function fetchBookings() {
-      if (!user.name) return;
+      if (!user?.name) return;
 
       try {
         const response = await getProfileBookings(user.name);
@@ -52,7 +51,15 @@ function ProfilePage() {
     }
 
     fetchBookings();
-  }, [user.name]);
+  }, [user]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <>
@@ -60,8 +67,8 @@ function ProfilePage() {
         <div className="relative">
           {/* Banner */}
           <img
-            src={user.banner.url}
-            alt={user.banner.alt}
+            src={user?.banner?.url}
+            alt={user?.banner?.alt}
             className="w-full h-[350px] object-cover"
           />
 
@@ -69,8 +76,8 @@ function ProfilePage() {
           <div className="absolute max-[1380px]:pl-10 inset-x-0 top-0 h-full pointer-events-none">
             <div className="max-w-[1300px] mx-auto px-10 relative h-full">
               <img
-                src={user.avatar.url}
-                alt={user.avatar.alt}
+                src={user?.avatar?.url}
+                alt={user?.avatar?.alt}
                 className="
         absolute
         left-0

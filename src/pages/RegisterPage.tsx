@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { register, login } from "../api/auth";
+import { useAuth } from "../context/AuthContext";
 import { Button } from "../components/Button";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,6 +8,8 @@ import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 
 function RegisterPage() {
   const navigate = useNavigate();
+
+  const { loginUser } = useAuth();
 
   const [accountType, setAccountType] = useState<"customer" | "manager">(
     "customer"
@@ -95,7 +98,9 @@ function RegisterPage() {
       });
 
       // Login immediately after
-      await login(formData.email, formData.password);
+      const userData = await login(formData.email, formData.password);
+
+      loginUser(userData);
 
       // Redirect to profile
       navigate("/profile");
