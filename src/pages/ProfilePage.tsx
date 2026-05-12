@@ -110,14 +110,10 @@ function ProfilePage() {
                       Venue manager account
                     </p>
                     <div className="flex gap-2">
-                      <Button to="/profile/edit" size="small">
+                      <Button onClick={() => setShowEdit(true)} size="small">
                         Edit Profile
                       </Button>
-                      <Button
-                        onClick={() => setShowEdit(true)}
-                        variant="secondary"
-                        size="small"
-                      >
+                      <Button variant="secondary" size="small">
                         New Venue
                       </Button>
                     </div>
@@ -176,7 +172,9 @@ function ProfilePage() {
                         ? user.description
                         : "User doesn't have a description"}
                     </p>
-                    <Button size="small">Edit Profile</Button>
+                    <Button onClick={() => setShowEdit(true)} size="small">
+                      Edit Profile
+                    </Button>
                   </div>
 
                   {/* Display bookings */}
