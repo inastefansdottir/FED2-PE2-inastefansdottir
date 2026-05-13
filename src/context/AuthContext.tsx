@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import type { User } from "../types/user";
 
 const AuthContext = createContext(null);
 
@@ -16,7 +17,7 @@ export function AuthProvider({ children }) {
     setLoading(false);
   }, []);
 
-  function loginUser(userData) {
+  function loginUser(userData: User) {
     localStorage.setItem("user", JSON.stringify(userData));
     setUser(userData);
   }

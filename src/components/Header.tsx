@@ -30,7 +30,10 @@ function Header() {
                   )}
                 </div>
               </div>
-              <img src={user.avatar?.url} className="rounded-full w-10 h-10" />
+              <img
+                src={user.avatar?.url}
+                className="rounded-full w-10 h-10 object-cover"
+              />
             </NavLink>
           ) : (
             <div className="flex gap-3 font-body font-semibold">

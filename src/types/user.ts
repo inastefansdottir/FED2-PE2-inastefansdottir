@@ -1,6 +1,7 @@
 export interface User {
   name: string;
   email: string;
+  bio: string;
   avatar: {
     url: string;
     alt: string;

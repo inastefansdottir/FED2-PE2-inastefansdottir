@@ -1,6 +1,7 @@
 import { apiRequest } from "./client";
 import type { ApiResponse } from "../types/api";
 import type { UpdateProfileData } from "../types/profile";
+import type { User } from "../types/user";
 import type { Venue } from "../types/venue";
 import type { Booking } from "../types/booking";
 
@@ -8,7 +9,10 @@ export function getProfile(username: string) {
   return apiRequest(`/holidaze/profiles/${username}`);
 }
 
-export function updateProfile(username: string, data: UpdateProfileData) {
+export function updateProfile(
+  username: string,
+  data: UpdateProfileData
+): Promise<ApiResponse<User>> {
   return apiRequest(`/holidaze/profiles/${username}`, {
     method: "PUT",
     body: JSON.stringify(data),

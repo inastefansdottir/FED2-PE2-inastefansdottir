@@ -168,9 +168,7 @@ function ProfilePage() {
                     <h1 className="text-xl mb-1">{user.name}</h1>
                     <p className="text-brownDark mb-5">{user.email}</p>
                     <p className="w-[250px] mb-3">
-                      {user.description
-                        ? user.description
-                        : "User doesn't have a description"}
+                      {user.bio ? user.bio : "User doesn't have a bio yet"}
                     </p>
                     <Button onClick={() => setShowEdit(true)} size="small">
                       Edit Profile
