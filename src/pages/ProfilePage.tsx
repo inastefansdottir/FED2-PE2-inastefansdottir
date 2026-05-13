@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { getMyVenues, getProfileBookings } from "../api/profile";
 import VenueCard from "../components/VenueCard";
+import EditProfileModal from "../components/EditProfile";
 import EditVenueModal from "../components/EditVenue";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -13,6 +14,8 @@ function ProfilePage() {
   const { user, loading, logoutUser } = useAuth();
 
   const [showEdit, setShowEdit] = useState(false);
+  const [showEditVenue, setShowEditVenue] = useState(false);
+
   const [myVenues, setMyVenues] = useState([]);
   const [myBookings, setMyBookings] = useState([]);
 
@@ -113,7 +116,11 @@ function ProfilePage() {
                       <Button onClick={() => setShowEdit(true)} size="small">
                         Edit Profile
                       </Button>
-                      <Button variant="secondary" size="small">
+                      <Button
+                        variant="secondary"
+                        size="small"
+                        onClick={() => setShowEditVenue(true)}
+                      >
                         New Venue
                       </Button>
                     </div>
@@ -138,7 +145,12 @@ function ProfilePage() {
                           <p className="text-xl w-[250px] text-center">
                             You haven't created any venues yet
                           </p>
-                          <Button variant="secondary">Create Venue</Button>
+                          <Button
+                            onClick={() => setShowEditVenue(true)}
+                            variant="secondary"
+                          >
+                            Create Venue
+                          </Button>
                         </div>
                       ) : (
                         <div className="grid grid-cols-3 gap-[25px]">
@@ -271,7 +283,11 @@ function ProfilePage() {
         </div>
       </div>
 
-      {showEdit && <EditVenueModal onClose={() => setShowEdit(false)} />}
+      {showEdit && <EditProfileModal onClose={() => setShowEdit(false)} />}
+
+      {showEditVenue && (
+        <EditVenueModal onClose={() => setShowEditVenue(false)} />
+      )}
     </>
   );
 }
