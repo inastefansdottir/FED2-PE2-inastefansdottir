@@ -183,7 +183,7 @@ function VenuePage() {
                 <p>Wifi</p>
               </li>
               <li className="flex items-center">
-                {venue.meta.wifi ? (
+                {venue.meta.parking ? (
                   <FontAwesomeIcon
                     icon={faCircleCheck}
                     className="text-primary mr-2"
@@ -197,7 +197,7 @@ function VenuePage() {
                 <p>Parking</p>
               </li>
               <li className="flex items-center">
-                {venue.meta.wifi ? (
+                {venue.meta.breakfast ? (
                   <FontAwesomeIcon
                     icon={faCircleCheck}
                     className="text-primary mr-2"
@@ -211,7 +211,7 @@ function VenuePage() {
                 <p>Breakfast</p>
               </li>
               <li className="flex items-center">
-                {venue.meta.wifi ? (
+                {venue.meta.pets ? (
                   <FontAwesomeIcon
                     icon={faCircleCheck}
                     className="text-primary mr-2"

@@ -46,7 +46,6 @@ export interface CreateVenueData {
   }[];
   price: number;
   maxGuests: number;
-  rating?: number;
   meta?: {
     wifi?: boolean;
     parking?: boolean;

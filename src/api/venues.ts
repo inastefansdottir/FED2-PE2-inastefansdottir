@@ -18,7 +18,9 @@ export function searchVenues(query: string): Promise<Venue[]> {
   );
 }
 
-export function createVenue(data: CreateVenueData) {
+export function createVenue(
+  data: CreateVenueData
+): Promise<ApiResponse<Venue>> {
   return apiRequest(`/holidaze/venues`, {
     method: "POST",
     body: JSON.stringify(data),

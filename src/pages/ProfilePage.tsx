@@ -5,7 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import { getMyVenues, getProfileBookings } from "../api/profile";
 import VenueCard from "../components/VenueCard";
 import EditProfileModal from "../components/EditProfile";
-import EditVenueModal from "../components/EditVenue";
+import CreateVenueModal from "../components/CreateVenue";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
@@ -14,7 +14,7 @@ function ProfilePage() {
   const { user, loading, logoutUser } = useAuth();
 
   const [showEdit, setShowEdit] = useState(false);
-  const [showEditVenue, setShowEditVenue] = useState(false);
+  const [showCreateVenue, setShowCreateVenue] = useState(false);
 
   const [myVenues, setMyVenues] = useState([]);
   const [myBookings, setMyBookings] = useState([]);
@@ -119,7 +119,7 @@ function ProfilePage() {
                       <Button
                         variant="secondary"
                         size="small"
-                        onClick={() => setShowEditVenue(true)}
+                        onClick={() => setShowCreateVenue(true)}
                       >
                         New Venue
                       </Button>
@@ -146,7 +146,7 @@ function ProfilePage() {
                             You haven't created any venues yet
                           </p>
                           <Button
-                            onClick={() => setShowEditVenue(true)}
+                            onClick={() => setShowCreateVenue(true)}
                             variant="secondary"
                           >
                             Create Venue
@@ -285,8 +285,8 @@ function ProfilePage() {
 
       {showEdit && <EditProfileModal onClose={() => setShowEdit(false)} />}
 
-      {showEditVenue && (
-        <EditVenueModal onClose={() => setShowEditVenue(false)} />
+      {showCreateVenue && (
+        <CreateVenueModal onClose={() => setShowCreateVenue(false)} />
       )}
     </>
   );
