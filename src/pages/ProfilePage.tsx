@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { getMyVenues, getProfileBookings } from "../api/profile";
+import type { Venue } from "../types/venue";
+import type { Booking } from "../types/booking";
 import VenueCard from "../components/VenueCard";
 import EditProfileModal from "../components/EditProfile";
 import CreateVenueModal from "../components/CreateVenue";
@@ -16,8 +18,8 @@ function ProfilePage() {
   const [showEdit, setShowEdit] = useState(false);
   const [showCreateVenue, setShowCreateVenue] = useState(false);
 
-  const [myVenues, setMyVenues] = useState([]);
-  const [myBookings, setMyBookings] = useState([]);
+  const [myVenues, setMyVenues] = useState<Venue[]>([]);
+  const [myBookings, setMyBookings] = useState<Booking[]>([]);
 
   function logout() {
     logoutUser();
@@ -157,7 +159,7 @@ function ProfilePage() {
                           {myVenues.map((venue) => (
                             <VenueCard
                               key={venue.id}
-                              to={`/venue/${venue.id}`}
+                              to={`/venue/dashboard/${venue.id}`}
                               image={venue.media?.[0]?.url}
                               alt={venue.media?.[0]?.alt}
                               title={venue.name}

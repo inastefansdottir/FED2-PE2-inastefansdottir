@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import VenuePage from "./pages/VenuePage";
+import VenueDashboardPage from "./pages/VenueDashboardPage";
 import RegisterPage from "./pages/RegisterPage";
 import ProfilePage from "./pages/ProfilePage";
 import ProtectedRoute from "./routes/ProtectedRoute";
@@ -16,6 +17,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/venue/:id" element={<VenuePage />} />
+          <Route path="/venue/dashboard/:id" element={<VenueDashboardPage />} />
           <Route path="/venue/edit/:id" element={<h1>Edit Venue</h1>} />
           <Route
             path="/register"

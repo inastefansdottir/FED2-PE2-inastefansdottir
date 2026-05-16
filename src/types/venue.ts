@@ -1,11 +1,13 @@
+export interface Media {
+  url: string;
+  alt?: string;
+}
+
 export interface Venue {
   id: string;
   name: string;
   description: string;
-  media: {
-    url: string;
-    alt: string;
-  }[];
+  media: Media[];
   price: number;
   maxGuests: number;
   rating: number;

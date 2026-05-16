@@ -237,7 +237,9 @@ export default function CreateVenueModal({ onClose }: Props) {
   "
         onClick={(e) => e.stopPropagation()}
       >
-        <h1 className="text-2xl flex justify-center mb-4">Edit Venue</h1>
+        <h1 className="text-2xl flex justify-center mb-4">
+          Create a new Venue
+        </h1>
 
         {/* CLOSE */}
         <button

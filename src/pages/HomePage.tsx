@@ -7,54 +7,54 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "../components/Button";
 import VenueCard from "../components/VenueCard";
+import type { Venue } from "../types/venue";
 import heroImage from "../assets/hero-image.png";
 
 function HomePage() {
-  const [venues, setVenues] = useState([]);
+  const [venues, setVenues] = useState<Venue[]>([]);
   const [page, setPage] = useState(1);
 
-  const [query, setQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const [guests, setGuests] = useState<number | "">("");
-  const [searchActive, setSearchActive] = useState(false);
-  const [filters, setFilters] = useState({
-    query: "",
-    guests: "" as number | "",
-    range: null,
-  });
 
-  const [open, setOpen] = useState(false);
   const [range, setRange] = useState<any>();
+  const [open, setOpen] = useState(false);
 
-  const [allVenuesLoaded, setAllVenuesLoaded] = useState(false);
-
-  const [isSearchLoading, setIsSearchLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [isSearching, setIsSearching] = useState(false);
 
   const calendarRef = useRef(null);
 
   useEffect(() => {
     async function fetchVenues() {
+      if (loading || !hasMore) return;
+
+      setLoading(true);
+
       try {
         const response = await getVenues(page, 40);
 
         setVenues((prev) => {
-          const combined = [...prev, ...response.data];
+          const map = new Map();
 
-          return combined.filter(
-            (venue, index, self) =>
-              index === self.findIndex((v) => v.id === venue.id)
-          );
+          [...prev, ...response.data].forEach((v) => {
+            map.set(v.id, v);
+          });
+
+          return Array.from(map.values());
         });
 
-        if (!response.meta.nextPage) {
-          setAllVenuesLoaded(true);
-        }
+        setHasMore(!!response.meta?.nextPage);
       } catch (error) {
         console.error(error);
+      } finally {
+        setLoading(false);
       }
     }
 
     fetchVenues();
-  }, [page]);
+  }, [page, searchQuery]);
 
   function formatDate(date: Date) {
     return date.toLocaleDateString("en-GB", {
@@ -81,74 +81,20 @@ function HomePage() {
     };
   }, []);
 
-  const filteredVenues = searchActive
-    ? venues.filter((venue) => {
-        const q = (filters.query || "").toLowerCase();
-
-        const location = venue.location;
-
-        const fullLocation = `
-  ${location?.address || ""}
-  ${location?.city || ""}
-  ${location?.zip || ""}
-  ${location?.country || ""}
-  ${location?.continent || ""}
-`.toLowerCase();
-
-        const matchesLocation = fullLocation.includes(q);
-
-        const matchesGuests =
-          typeof filters.guests === "number"
-            ? venue.maxGuests >= filters.guests
-            : true;
-
-        let matchesDates = true;
-
-        if (filters.range?.from && filters.range?.to && venue.bookings) {
-          const from = new Date(filters.range.from);
-          const to = new Date(filters.range.to);
-
-          matchesDates = !venue.bookings.some((b) => {
-            const bf = new Date(b.dateFrom);
-            const bt = new Date(b.dateTo);
-
-            return from <= bt && to >= bf;
-          });
-        }
-
-        return matchesLocation && matchesGuests && matchesDates;
-      })
-    : venues;
-
   useEffect(() => {
-    if (!searchActive) return;
-
-    if (!allVenuesLoaded) {
-      setIsSearchLoading(true);
-      setPage((prev) => prev + 1);
-    } else {
-      setIsSearchLoading(false);
+    if (!searchQuery) {
+      setIsSearching(false);
     }
-  }, [venues, searchActive, allVenuesLoaded]);
+  }, [searchQuery]);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    setFilters({
-      query,
-      guests,
-      range,
-    });
-
-    setSearchActive(false);
-    setAllVenuesLoaded(false);
     setVenues([]);
     setPage(1);
-    setIsSearchLoading(true); // 👈 important
+    setHasMore(true);
 
-    setTimeout(() => {
-      setSearchActive(true);
-    }, 0);
+    setIsSearching(true);
   }
 
   return (
@@ -170,8 +116,8 @@ function HomePage() {
                 name="location"
                 type="text"
                 placeholder="Search location"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 className="placeholder-primary pt-1"
               />
             </div>
@@ -236,11 +182,11 @@ function HomePage() {
 
       {/* Venue card grid */}
       <div className="flex justify-center px-10 mt-[130px] mb-[85px]">
-        {isSearchLoading ? (
+        {isSearching ? (
           <span className="loader"></span>
         ) : (
           <div className="grid xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-[30px]">
-            {filteredVenues.map((venue) => (
+            {venues.map((venue) => (
               <VenueCard
                 key={venue.id}
                 to={`/venue/${venue.id}`}
@@ -258,18 +204,20 @@ function HomePage() {
         )}
       </div>
 
-      {!searchActive && (
-        <button
-          onClick={() => setPage((prev) => prev + 1)}
-          className="bg-primary rounded-full p-3 self-center hover:bg-secondary mb-[130px]"
-        >
-          <FontAwesomeIcon
-            icon={faPlus}
-            size="xl"
-            className="text-background w-[1em]"
-          />
-        </button>
-      )}
+      <button
+        onClick={() => {
+          if (!loading && hasMore) {
+            setPage((prev) => prev + 1);
+          }
+        }}
+        className="bg-primary rounded-full p-3 self-center hover:bg-secondary mb-[130px]"
+      >
+        <FontAwesomeIcon
+          icon={faPlus}
+          size="xl"
+          className="text-background w-[1em]"
+        />
+      </button>
     </div>
   );
 }
