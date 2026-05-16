@@ -2,8 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Button } from "../components/Button";
 import "react-day-picker/style.css";
-import type { Media } from "../types/venue";
-import type { Booking } from "../types/booking";
+import type { Media, Venue } from "../types/venue";
 import noImage from "../assets/no-image.png";
 import { getVenueById } from "../api/venues";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -19,7 +18,7 @@ import {
 function VenueDashboardPage() {
   const { id } = useParams();
 
-  const [venue, setVenue] = useState(null);
+  const [venue, setVenue] = useState<Venue | null>(null);
   const [selectedImage, setSelectedImage] = useState(0);
 
   const validImages = venue?.media?.filter((image: Media) => image?.url) || [];
@@ -39,28 +38,6 @@ function VenueDashboardPage() {
 
     fetchVenue();
   }, [id]);
-
-  // Outside click
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        calendarRef.current &&
-        !(calendarRef.current as HTMLElement).contains(event.target as Node)
-      ) {
-        setOpen(false);
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  if (!venue) {
-    return <p>Loading...</p>;
-  }
 
   return (
     <div className="px-10 mt-[50px] mb-[100px]">

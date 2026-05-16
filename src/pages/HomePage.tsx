@@ -24,7 +24,7 @@ function HomePage() {
   const [hasMore, setHasMore] = useState(true);
   const [isSearching, setIsSearching] = useState(false);
 
-  const calendarRef = useRef(null);
+  const calendarRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     async function fetchVenues() {

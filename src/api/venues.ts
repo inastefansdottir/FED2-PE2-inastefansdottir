@@ -1,6 +1,6 @@
 import { apiRequest } from "./client";
 import type { ApiResponse } from "../types/api";
-import type { Venue, CreateVenueData } from "../types/venue";
+import type { Venue, CreateVenueData, VenueWithBookings } from "../types/venue";
 
 export function getVenues(page = 1, limit = 10): Promise<ApiResponse<Venue[]>> {
   return apiRequest<ApiResponse<Venue[]>>(
@@ -8,8 +8,12 @@ export function getVenues(page = 1, limit = 10): Promise<ApiResponse<Venue[]>> {
   );
 }
 
-export function getVenueById(id: string): Promise<ApiResponse<Venue>> {
-  return apiRequest<ApiResponse<Venue>>(`/holidaze/venues/${id}?_owner=true`);
+export function getVenueById(
+  id: string
+): Promise<ApiResponse<VenueWithBookings>> {
+  return apiRequest<ApiResponse<VenueWithBookings>>(
+    `/holidaze/venues/${id}?_owner=true&_bookings=true`
+  );
 }
 
 export function searchVenues(query: string): Promise<Venue[]> {

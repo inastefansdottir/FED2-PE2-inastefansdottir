@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Button } from "../components/Button";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
+import type { Media, VenueWithBookings } from "../types/venue";
 import { useRef } from "react";
 import noImage from "../assets/no-image.png";
 import { getVenueById } from "../api/venues";
@@ -19,16 +20,16 @@ import {
 function VenuePage() {
   const { id } = useParams();
 
-  const [venue, setVenue] = useState(null);
+  const [venue, setVenue] = useState<VenueWithBookings | null>(null);
   const [selectedImage, setSelectedImage] = useState(0);
 
-  const validImages = venue?.media?.filter((image) => image?.url) || [];
+  const validImages = venue?.media?.filter((image: Media) => image?.url) || [];
 
   const [open, setOpen] = useState(false);
   const [range, setRange] = useState<any>();
   const [guests, setGuests] = useState<number | "">("");
 
-  const calendarRef = useRef(null);
+  const calendarRef = useRef<HTMLDivElement | null>(null);
 
   const bookedDates = (venue?.bookings || []).map((booking) => ({
     from: new Date(booking.dateFrom),

@@ -1,3 +1,5 @@
+import type { Booking } from "./booking";
+
 export interface Media {
   url: string;
   alt?: string;
@@ -37,6 +39,10 @@ export interface Venue {
       alt: string;
     };
   };
+}
+
+export interface VenueWithBookings extends Venue {
+  bookings: Booking[];
 }
 
 export interface CreateVenueData {
