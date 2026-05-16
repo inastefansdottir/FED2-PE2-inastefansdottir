@@ -159,7 +159,7 @@ function ProfilePage() {
                               key={venue.id}
                               to={`/venue/dashboard/${venue.id}`}
                               image={venue.media?.[0]?.url}
-                              alt={venue.media?.[0]?.alt}
+                              alt={venue.media?.[0]?.alt ?? ""}
                               title={venue.name}
                               rating={venue.rating}
                               city={venue.location.city}

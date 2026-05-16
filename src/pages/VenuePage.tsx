@@ -23,6 +23,9 @@ function VenuePage() {
   const [venue, setVenue] = useState<VenueWithBookings | null>(null);
   const [selectedImage, setSelectedImage] = useState(0);
 
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
   const validImages = venue?.media?.filter((image: Media) => image?.url) || [];
 
   const [open, setOpen] = useState(false);
@@ -49,11 +52,22 @@ function VenuePage() {
       if (!id) return;
 
       try {
+        setLoading(true);
+        setError(null);
+
         const response = await getVenueById(id);
+
+        if (!response.data) {
+          setError("Venue not found");
+          return;
+        }
+
         setVenue(response.data);
-        console.log(response.data);
       } catch (error) {
         console.error(error);
+        setError("Failed to load venue");
+      } finally {
+        setLoading(false);
       }
     }
 
@@ -78,8 +92,20 @@ function VenuePage() {
     };
   }, []);
 
-  if (!venue) {
-    return <p>Loading...</p>;
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-[60vh]">
+        <span className="loader"></span>
+      </div>
+    );
+  }
+
+  if (error || !venue) {
+    return (
+      <div className="flex justify-center items-center h-[60vh] text-primary">
+        {error || "Venue is not available"}
+      </div>
+    );
   }
 
   return (

@@ -39,6 +39,8 @@ function VenueDashboardPage() {
     fetchVenue();
   }, [id]);
 
+  if (!venue) return <p>Loading...</p>;
+
   return (
     <div className="px-10 mt-[50px] mb-[100px]">
       <div className="max-w-[1300px] w-full">
