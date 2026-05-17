@@ -26,19 +26,19 @@ function ProfilePage() {
     navigate("/");
   }
 
-  useEffect(() => {
-    async function fetchVenues() {
-      if (!user?.name) return;
+  async function fetchVenues() {
+    if (!user?.name) return;
 
-      try {
-        const response = await getMyVenues(user.name);
-        setMyVenues(response.data);
-        console.log(response.data);
-      } catch (error) {
-        console.error(error);
-      }
+    try {
+      const response = await getMyVenues(user.name);
+      setMyVenues(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
     }
+  }
 
+  useEffect(() => {
     fetchVenues();
   }, [user]);
 
@@ -286,7 +286,10 @@ function ProfilePage() {
       {showEdit && <EditProfileModal onClose={() => setShowEdit(false)} />}
 
       {showCreateVenue && (
-        <CreateVenueModal onClose={() => setShowCreateVenue(false)} />
+        <CreateVenueModal
+          onClose={() => setShowCreateVenue(false)}
+          onSave={fetchVenues}
+        />
       )}
     </>
   );

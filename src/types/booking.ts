@@ -8,6 +8,19 @@ export interface Booking {
   created: string;
   updated: string;
   venue: Venue;
+  customer: {
+    name: string;
+    email: string;
+    bio: string;
+    avatar: {
+      url: string;
+      alt: string;
+    };
+    banner: {
+      url: string;
+      alt: string;
+    };
+  };
 }
 
 export interface CreateBooking {

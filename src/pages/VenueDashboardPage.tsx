@@ -218,21 +218,31 @@ function VenueDashboardPage() {
                   <p>Booked dates</p>
                   <p>Guests</p>
                 </div>
-
-                <div
-                  className="
-      grid
-grid-cols-[1.5fr_2fr_53px]
-      items-center
-      border-b
-      border-brownLight
-      py-3
-    "
-                >
-                  <p>HelloKitty</p>
-                  <p>08.08.26 - 10.08.26</p>
-                  <p>2</p>
-                </div>
+                {venue.bookings.length === 0 ? (
+                  <div className="flex justify-center items-center h-[260px]">
+                    <p className="text-2xl text-brownLight">No bookings yet</p>
+                  </div>
+                ) : (
+                  venue.bookings.map((booking) => (
+                    <div
+                      key={booking.id}
+                      className="
+        grid
+        grid-cols-[1.5fr_2fr_53px]
+        items-center
+        border-b
+        border-brownLight
+        py-3
+      "
+                    >
+                      <p>{booking.customer.name}</p>
+                      <p>
+                        {booking.dateFrom} - {booking.dateTo}
+                      </p>
+                      <p>{booking.guests}</p>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
           </div>

@@ -10,9 +10,10 @@ import imagePlaceholder from "../assets/image-placeholder.png";
 
 type Props = {
   onClose: () => void;
+  onSave: () => void;
 };
 
-export default function CreateVenueModal({ onClose }: Props) {
+export default function CreateVenueModal({ onClose, onSave }: Props) {
   const [form, setForm] = useState({
     name: "",
     description: "",
@@ -208,6 +209,7 @@ export default function CreateVenueModal({ onClose }: Props) {
 
       await createVenue(payload);
 
+      await onSave();
       onClose();
     } catch (err: any) {
       setApiError(err.message || "Something went wrong");
