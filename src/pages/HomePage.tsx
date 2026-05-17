@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { DayPicker } from "react-day-picker";
+import type { DateRange } from "react-day-picker";
 import "react-day-picker/style.css";
 import { useRef } from "react";
 import { getVenues } from "../api/venues";
@@ -17,14 +18,18 @@ function HomePage() {
   const [query, setQuery] = useState("");
   const [guests, setGuests] = useState<number | "">("");
   const [searchActive, setSearchActive] = useState(false);
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<{
+    query: string;
+    guests: number | "";
+    range: DateRange | undefined;
+  }>({
     query: "",
-    guests: "" as number | "",
-    range: null,
+    guests: "",
+    range: undefined,
   });
 
   const [open, setOpen] = useState(false);
-  const [range, setRange] = useState<any>();
+  const [range, setRange] = useState<DateRange | undefined>();
 
   const [allVenuesLoaded, setAllVenuesLoaded] = useState(false);
 
@@ -246,7 +251,7 @@ function HomePage() {
                 key={venue.id}
                 to={`/venue/${venue.id}`}
                 image={venue.media?.[0]?.url}
-                alt={venue.media?.[0]?.alt}
+                alt={venue.media?.[0]?.alt ?? ""}
                 title={venue.name}
                 rating={venue.rating}
                 city={venue.location.city}
