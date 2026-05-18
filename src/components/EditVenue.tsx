@@ -190,7 +190,7 @@ export default function EditVenueModal({ onClose, venue, onUpdated }: Props) {
 
       await updateVenue(venue.id, payload);
 
-      await onUpdated();
+      onUpdated();
       onClose();
     } catch (err: any) {
       setApiError(err.message || "Something went wrong");

@@ -38,6 +38,14 @@ function ProfilePage() {
     }
   }
 
+  function formatDate(date: Date) {
+    return date.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "2-digit",
+    });
+  }
+
   useEffect(() => {
     fetchVenues();
   }, [user]);
@@ -243,10 +251,11 @@ function ProfilePage() {
       py-3
     "
                             >
-                              <p>{booking.venue.name}</p>
+                              <p>{booking.venue?.name}</p>
 
                               <p>
-                                {booking.dateFrom} - {booking.dateTo}
+                                {formatDate(new Date(booking.dateFrom))} -{" "}
+                                {formatDate(new Date(booking.dateTo))}
                               </p>
 
                               <p>{booking.guests}</p>

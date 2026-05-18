@@ -26,6 +26,14 @@ function VenueDashboardPage() {
 
   const [showEdit, setShowEdit] = useState(false);
 
+  function formatDate(date: Date) {
+    return date.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "2-digit",
+    });
+  }
+
   async function fetchVenue() {
     if (!id) return;
 
@@ -237,7 +245,8 @@ function VenueDashboardPage() {
                     >
                       <p>{booking.customer.name}</p>
                       <p>
-                        {booking.dateFrom} - {booking.dateTo}
+                        {formatDate(new Date(booking.dateFrom))} -{" "}
+                        {formatDate(new Date(booking.dateTo))}
                       </p>
                       <p>{booking.guests}</p>
                     </div>

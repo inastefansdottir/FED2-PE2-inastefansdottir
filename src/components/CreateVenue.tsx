@@ -209,7 +209,7 @@ export default function CreateVenueModal({ onClose, onSave }: Props) {
 
       await createVenue(payload);
 
-      await onSave();
+      onSave();
       onClose();
     } catch (err: any) {
       setApiError(err.message || "Something went wrong");

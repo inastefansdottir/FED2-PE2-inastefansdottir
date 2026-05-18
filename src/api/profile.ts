@@ -22,7 +22,7 @@ export function updateProfile(
 export function getProfileBookings(
   username: string
 ): Promise<ApiResponse<Booking[]>> {
-  return apiRequest(`/holidaze/profiles/${username}/bookings?_venues=true`);
+  return apiRequest(`/holidaze/profiles/${username}/bookings?_venue=true`);
 }
 
 export function getMyVenues(username: string): Promise<ApiResponse<Venue[]>> {
