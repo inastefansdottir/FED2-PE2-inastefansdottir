@@ -1,10 +1,11 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Button } from "../components/Button";
 import "react-day-picker/style.css";
 import type { Media, VenueWithBookings } from "../types/venue";
 import noImage from "../assets/no-image.png";
 import { getVenueById } from "../api/venues";
+import { deleteVenue } from "../api/venues";
 import EditVenueModal from "../components/EditVenue";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -25,6 +26,8 @@ function VenueDashboardPage() {
   const validImages = venue?.media?.filter((image: Media) => image?.url) || [];
 
   const [showEdit, setShowEdit] = useState(false);
+
+  const navigate = useNavigate();
 
   function formatDate(date: Date) {
     return date.toLocaleDateString("en-GB", {
@@ -48,6 +51,24 @@ function VenueDashboardPage() {
   useEffect(() => {
     fetchVenue();
   }, [id]);
+
+  async function handleDeleteVenue() {
+    if (!venue) return;
+
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this venue?"
+    );
+
+    if (!confirmed) return;
+
+    try {
+      await deleteVenue(venue.id);
+
+      navigate("/profile");
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   if (!venue) return <p>Loading...</p>;
 
@@ -203,14 +224,18 @@ function VenueDashboardPage() {
                 <Button className="w-full" onClick={() => setShowEdit(true)}>
                   Edit Venue
                 </Button>
-                <Button variant="error" className="w-full">
+                <Button
+                  variant="error"
+                  className="w-full"
+                  onClick={handleDeleteVenue}
+                >
                   Delete Venue
                 </Button>
               </div>
               <h2 className="font-body text-xl font-semibold mt-[30px] mb-[15px]">
                 Customer Bookings
               </h2>
-              <div className="bg-white shadow-lg rounded-[10px] h-[340px] p-[20px] w-[500px]">
+              <div className="bg-white shadow-lg rounded-[10px] h-[340px] p-[20px] w-[500px] flex flex-col">
                 <div
                   className="
       grid
@@ -231,10 +256,11 @@ function VenueDashboardPage() {
                     <p className="text-2xl text-brownLight">No bookings yet</p>
                   </div>
                 ) : (
-                  venue.bookings.map((booking) => (
-                    <div
-                      key={booking.id}
-                      className="
+                  <div className="overflow-y-auto flex-1 pr-2">
+                    {venue.bookings.map((booking) => (
+                      <div
+                        key={booking.id}
+                        className="
         grid
         grid-cols-[1.5fr_2fr_53px]
         items-center
@@ -242,15 +268,16 @@ function VenueDashboardPage() {
         border-brownLight
         py-3
       "
-                    >
-                      <p>{booking.customer.name}</p>
-                      <p>
-                        {formatDate(new Date(booking.dateFrom))} -{" "}
-                        {formatDate(new Date(booking.dateTo))}
-                      </p>
-                      <p>{booking.guests}</p>
-                    </div>
-                  ))
+                      >
+                        <p>{booking.customer.name}</p>
+                        <p>
+                          {formatDate(new Date(booking.dateFrom))} -{" "}
+                          {formatDate(new Date(booking.dateTo))}
+                        </p>
+                        <p>{booking.guests}</p>
+                      </div>
+                    ))}
+                  </div>
                 )}
               </div>
             </div>

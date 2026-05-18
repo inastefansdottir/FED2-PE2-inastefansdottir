@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { getMyVenues, getProfileBookings } from "../api/profile";
+import { deleteBooking } from "../api/bookings";
 import type { Venue } from "../types/venue";
 import type { Booking } from "../types/booking";
 import VenueCard from "../components/VenueCard";
@@ -38,6 +39,10 @@ function ProfilePage() {
     }
   }
 
+  useEffect(() => {
+    fetchVenues();
+  }, [user]);
+
   function formatDate(date: Date) {
     return date.toLocaleDateString("en-GB", {
       day: "2-digit",
@@ -45,10 +50,6 @@ function ProfilePage() {
       year: "2-digit",
     });
   }
-
-  useEffect(() => {
-    fetchVenues();
-  }, [user]);
 
   useEffect(() => {
     async function fetchBookings() {
@@ -72,6 +73,22 @@ function ProfilePage() {
 
   if (!user) {
     return null;
+  }
+
+  async function handleDeleteBooking(id: string) {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this booking?"
+    );
+
+    if (!confirmed) return;
+
+    try {
+      await deleteBooking(id);
+
+      setMyBookings((prev) => prev.filter((booking) => booking.id !== id));
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
@@ -261,21 +278,22 @@ function ProfilePage() {
                               <p>{booking.guests}</p>
 
                               <button
+                                onClick={() => handleDeleteBooking(booking.id)}
                                 className="
-        justify-self-end
-        flex
-        items-center
-        justify-center
-        py-2
-        px-1.5
-        rounded-full
-        bg-error/20
-        text-error
-        hover:bg-error
-        hover:text-background
-        transition
-        mx-3
-      "
+    justify-self-end
+    flex
+    items-center
+    justify-center
+    py-2
+    px-1.5
+    rounded-full
+    bg-error/20
+    text-error
+    hover:bg-error
+    hover:text-background
+    transition
+    mx-3
+  "
                               >
                                 <FontAwesomeIcon icon={faTrash} size="xs" />
                               </button>
