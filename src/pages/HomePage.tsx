@@ -158,12 +158,12 @@ function HomePage() {
   }
 
   return (
-    <div className="relative flex flex-col">
+    <div className="relative w-full flex flex-col self-start">
       {/* Hero image */}
       <img src={heroImage} className="w-full h-[500px] object-cover" />
 
       {/* Search */}
-      <div className="absolute left-1/2 -translate-x-1/2 top-[466px] max-[720px]:top-[380px] px-5 sm:px-10 max-w-[1000px] w-full">
+      <div className="absolute left-1/2 -translate-x-1/2 top-[466px] max-[720px]:top-[380px] px-5 md:px-10 max-w-[1000px] w-full">
         <div className="p-2 max-[720px]:p-5 bg-white rounded-full max-[720px]:rounded-[20px] shadow-lg ">
           <form
             onSubmit={handleSubmit}
@@ -230,7 +230,7 @@ function HomePage() {
   "
             >
               {/* Guests */}
-              <div className="flex flex-col justify-center px-5 max-[720px]:px-0 min-w-[130px]">
+              <div className="flex flex-col justify-center px-5 max-[720px]:px-0 min-w-[150px] max-[720px]:min-w-0">
                 <label htmlFor="guests" className="text-xs font-semibold">
                   Guests:
                 </label>
@@ -267,11 +267,11 @@ function HomePage() {
       </div>
 
       {/* Venue card grid */}
-      <div className="flex justify-center px-5 sm:px-10 mt-[130px] max-[720px]:mt-[200px] mb-[85px]">
+      <div className="flex justify-center px-5 md:px-10 mt-[130px] max-[720px]:mt-[200px] mb-[85px]">
         {isSearchLoading ? (
-          <span className="loader"></span>
+          <span className="loader my-12"></span>
         ) : (
-          <div className="grid xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-[30px]">
+          <div className="grid xl:grid-cols-4 lg:grid-cols-3 min-[580px]:grid-cols-2 grid-cols-1 gap-[30px]">
             {filteredVenues.map((venue) => (
               <VenueCard
                 key={venue.id}

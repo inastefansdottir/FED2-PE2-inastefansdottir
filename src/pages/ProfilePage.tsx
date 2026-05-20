@@ -93,7 +93,7 @@ function ProfilePage() {
 
   return (
     <>
-      <div className="w-full">
+      <div className="w-full self-start">
         <div className="relative">
           {/* Banner */}
           <img
