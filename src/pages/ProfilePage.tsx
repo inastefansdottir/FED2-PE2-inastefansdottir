@@ -103,32 +103,35 @@ function ProfilePage() {
           />
 
           {/* Avatar */}
-          <div className="absolute max-[1380px]:pl-10 inset-x-0 top-0 h-full pointer-events-none">
-            <div className="max-w-[1300px] mx-auto px-10 relative h-full">
+          <div className="absolute max-[1380px]:pl-10 max-[767px]:pl-5 max-[700px]:pl-0 max-[700px]:left-1/2 max-[700px]:-translate-x-1/2 inset-x-0 top-0 h-full pointer-events-none w-full">
+            <div className="max-w-[1300px] mx-auto px-10 relative h-full max-[700px]:px-0 ">
               <img
                 src={user?.avatar?.url}
                 alt={user?.avatar?.alt}
                 className="
-        absolute
-        left-0
-        top-[225px]
-        object-cover
-        w-[250px]
-        h-[250px]
-        border-4
-        border-background
-        rounded-full
-      "
+    absolute
+    top-[225px]
+    left-0
+    w-[250px]
+    h-[250px]
+    object-cover
+    border-4
+    border-background
+    rounded-full
+
+    max-[700px]:left-1/2
+    max-[700px]:-translate-x-1/2
+  "
               />
             </div>
           </div>
 
-          <div className="flex justify-center px-10">
-            <div className="flex max-w-[1300px] w-full my-[100px]">
+          <div className="flex justify-center md:px-10 px-5">
+            <div className="flex max-[700px]:flex-col max-[700px]:items-center max-[1050px]:gap-0 max-[700px]:gap-20 max-w-[1300px] w-full my-[100px]">
               {user.venueManager ? (
                 <>
                   {/* Profile details */}
-                  <div className="mr-10 mt-[75px]">
+                  <div className="max-[700px]:text-center max-[700px]:mr-0 mr-10 mt-[75px]">
                     <h1 className="text-xl mb-1">{user.name}</h1>
                     <p className="text-brownDark mb-5">{user.email}</p>
                     <p className="w-[250px] mb-3">
@@ -164,9 +167,9 @@ function ProfilePage() {
                     </div>
 
                     {/* Venues*/}
-                    <div className="bg-white rounded-2xl p-5">
+                    <div className="bg-white rounded-2xl p-5 h-fit w-full">
                       {myVenues.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center gap-5 h-[380px] ">
+                        <div className="flex flex-col items-center justify-center gap-5 my-[50px]">
                           <p className="text-xl w-[250px] text-center">
                             You haven't created any venues yet
                           </p>
@@ -178,7 +181,7 @@ function ProfilePage() {
                           </Button>
                         </div>
                       ) : (
-                        <div className="grid grid-cols-3 gap-[25px]">
+                        <div className="grid xl:grid-cols-3 min-[900px]:grid-cols-2 grid-cols-1 gap-[25px]">
                           {myVenues.map((venue) => (
                             <VenueCard
                               key={venue.id}
@@ -201,7 +204,7 @@ function ProfilePage() {
               ) : (
                 <>
                   {/* Profile details */}
-                  <div className="mr-10 mt-[75px]">
+                  <div className="max-[700px]:text-center max-[700px]:mr-0 mr-10 mt-[75px]">
                     <h1 className="text-xl mb-1">{user.name}</h1>
                     <p className="text-brownDark mb-5">{user.email}</p>
                     <p className="w-[250px] mb-3">
@@ -227,7 +230,7 @@ function ProfilePage() {
                     </div>
 
                     {/* Bookings */}
-                    <div className="bg-white rounded-2xl h-[420px] p-5">
+                    <div className="bg-white rounded-2xl h-[420px] max-[920px]:text-sm max-[400px]:text-xs p-5">
                       {myBookings.length === 0 ? (
                         <div className="flex flex-col items-center justify-center h-full gap-5">
                           <p className="text-xl w-[250px] text-center">
@@ -268,9 +271,9 @@ function ProfilePage() {
       py-3
     "
                             >
-                              <p>{booking.venue?.name}</p>
+                              <p className="pr-3">{booking.venue?.name}</p>
 
-                              <p>
+                              <p className="pr-3">
                                 {formatDate(new Date(booking.dateFrom))} -{" "}
                                 {formatDate(new Date(booking.dateTo))}
                               </p>
@@ -293,6 +296,8 @@ function ProfilePage() {
     hover:text-background
     transition
     mx-3
+    max-[920px]:mx-2
+    max-[400px]:mx-1.5
   "
                               >
                                 <FontAwesomeIcon icon={faTrash} size="xs" />
