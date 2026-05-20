@@ -71,7 +71,7 @@ export default function EditProfileModal({ onClose }: Props) {
 
   return (
     <div
-      className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+      className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 md:px-10 px-5"
       onClick={onClose}
     >
       {/* MODAL */}
@@ -84,7 +84,8 @@ export default function EditProfileModal({ onClose }: Props) {
     max-h-[80vh]
     overflow-y-auto
     text-secondary
-    py-[40px]
+    sm:py-[40px]
+    py-[30px]
     rounded-3xl
     shadow-lg
   "
@@ -95,7 +96,7 @@ export default function EditProfileModal({ onClose }: Props) {
         {/* CLOSE */}
         <button
           onClick={onClose}
-          className="absolute top-[40px] right-[30px] text-lg"
+          className="absolute sm:top-[40px] top-[30px] sm:right-[30px] right-[20px] text-lg"
         >
           ✕
         </button>
@@ -116,7 +117,7 @@ export default function EditProfileModal({ onClose }: Props) {
         {/* FORM */}
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col mt-[100px] px-[30px] gap-[30px]"
+          className="flex flex-col mt-[100px] sm:px-[30px] px-[20px] gap-[30px]"
         >
           <div className="flex flex-col gap-2">
             <label htmlFor="banner">Banner image url:</label>
@@ -146,6 +147,7 @@ export default function EditProfileModal({ onClose }: Props) {
 
           <div className="flex flex-col gap-2">
             <label htmlFor="bio">Bio:</label>
+
             <textarea
               id="bio"
               name="bio"

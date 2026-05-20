@@ -83,12 +83,12 @@ export default function LoginModal({ onClose }: Props) {
 
   return (
     <div
-      className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+      className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-5"
       onClick={onClose}
     >
       {/* MODAL */}
       <div
-        className="relative bg-white max-w-[400px] w-full text-secondary px-[30px] py-[40px] rounded-3xl shadow-lg"
+        className="relative bg-white max-w-[400px] w-full text-secondary sm:px-[30px] px-[20px] sm:py-[40px] py-[30px] rounded-3xl shadow-lg"
         onClick={(e) => e.stopPropagation()}
       >
         <h1 className="text-2xl flex justify-center mb-4">Login</h1>

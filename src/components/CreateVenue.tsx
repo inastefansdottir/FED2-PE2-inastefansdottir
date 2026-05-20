@@ -220,7 +220,7 @@ export default function CreateVenueModal({ onClose, onSave }: Props) {
 
   return (
     <div
-      className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+      className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 md:px-10 px-5"
       onClick={onClose}
     >
       {/* MODAL */}
@@ -233,7 +233,8 @@ export default function CreateVenueModal({ onClose, onSave }: Props) {
     max-h-[80vh]
     overflow-y-auto
     text-secondary
-    py-[40px]
+    sm:py-[40px]
+    py-[30px]
     rounded-3xl
     shadow-lg
   "
@@ -246,14 +247,14 @@ export default function CreateVenueModal({ onClose, onSave }: Props) {
         {/* CLOSE */}
         <button
           onClick={onClose}
-          className="absolute top-[40px] right-[30px] text-lg"
+          className="absolute sm:top-[40px] top-[30px] sm:right-[30px] right-5 text-lg"
         >
           ✕
         </button>
         {/* FORM */}
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col mt-6 px-[30px] gap-5"
+          className="flex flex-col mt-6 sm:px-[30px] px-5 gap-5"
         >
           <h2 className="font-body text-xl"> Venue details</h2>
 
@@ -307,7 +308,7 @@ export default function CreateVenueModal({ onClose, onSave }: Props) {
 
           {/* Image previews */}
           <div>
-            <div className="grid grid-cols-4 gap-4">
+            <div className="grid grid-cols-4 max-[500px]:grid-cols-2 gap-4">
               {images.map((img, index) => (
                 <div
                   key={index}
@@ -363,6 +364,7 @@ export default function CreateVenueModal({ onClose, onSave }: Props) {
         rounded-full
         flex-1
         px-5 py-2.5
+        w-full
       "
               />
 
@@ -375,7 +377,7 @@ export default function CreateVenueModal({ onClose, onSave }: Props) {
           {/* Price */}
           <div className="flex gap-2">
             <div className="flex flex-col gap-1">
-              <label htmlFor="price">Price per night (NOK):</label>
+              <label htmlFor="price">Price per night:</label>
 
               <input
                 id="price"
@@ -414,7 +416,7 @@ export default function CreateVenueModal({ onClose, onSave }: Props) {
           <h2 className="font-body text-xl">Amenities</h2>
 
           {/* Checkboxes */}
-          <div className="flex justify-between w-full max-w-[550px]">
+          <div className="flex justify-between w-full max-w-[550px] max-[450px]:justify-start flex-wrap gap-x-16 gap-y-10">
             {/* Wifi */}
             <div className="flex gap-2 items-center">
               <input
@@ -424,7 +426,9 @@ export default function CreateVenueModal({ onClose, onSave }: Props) {
                 onChange={() => toggleAmenity("wifi")}
                 className="accent-primary h-4 w-4"
               />
-              <label htmlFor="wifi">Wifi</label>
+              <label htmlFor="wifi" className="max-[450px]:w-[75px]">
+                Wifi
+              </label>
             </div>
 
             {/* Parking */}
@@ -468,7 +472,7 @@ export default function CreateVenueModal({ onClose, onSave }: Props) {
           <h2 className="font-body text-xl">Location</h2>
 
           <div className="grid gap-2 mb-5">
-            <div className="flex gap-2">
+            <div className="flex gap-2 max-[450px]:flex-col">
               {/* Address */}
               <div className="flex flex-col gap-1 w-full">
                 <label htmlFor="address">Address:</label>
@@ -508,7 +512,7 @@ export default function CreateVenueModal({ onClose, onSave }: Props) {
 
             <div className="flex gap-2">
               {/* Country */}
-              <div className="flex flex-col gap-1 w-full">
+              <div className="flex flex-col flex-1 gap-1 w-full">
                 <label htmlFor="country">Country:</label>
 
                 <input
@@ -526,7 +530,7 @@ export default function CreateVenueModal({ onClose, onSave }: Props) {
               </div>
 
               {/* Zip code */}
-              <div className="flex flex-col gap-1 w-full">
+              <div className="flex flex-col flex-[0.6] gap-1 w-full">
                 <label htmlFor="zip">Zip code:</label>
 
                 <input
