@@ -70,15 +70,15 @@ function VenueDashboardPage() {
     }
   }
 
-  if (!venue) return <p>Loading...</p>;
+  if (!venue) return <span className="loader"></span>;
 
   return (
     <>
-      <div className="px-10 mt-[50px] mb-[100px]">
+      <div className="md:px-10 px-5 md:mt-[50px] mt-[35px] mb-[100px]">
         <div className="max-w-[1300px] w-full">
-          <div className="flex gap-5">
+          <div className="flex md:flex-row flex-col gap-5">
             {/* Image slider */}
-            <div className="flex flex-col h-[650px] gap-5 w-[229px] shrink-0">
+            <div className="flex md:flex-col flex-row xl:h-[650px] h-[500px] md:gap-5 gap-2 xl:w-[229px] w-[180px] max-[767px]:w-full max-[767px]:h-full shrink-0 max-[767px]:order-2">
               {Array.from({ length: 4 }).map((_, index) => {
                 const image = validImages[index];
 
@@ -88,20 +88,24 @@ function VenueDashboardPage() {
                     disabled={!image}
                     onClick={() => image && setSelectedImage(index)}
                     className={`
-        w-full h-[147px] rounded-[20px] overflow-hidden
-        ${!image ? "bg-background cursor-not-allowed opacity-50" : ""}
-      `}
+    w-full md:h-[147px] sm:h-[100px] h-[75px] sm:rounded-[20px] rounded-[15px] overflow-hidden
+    ${!image ? "bg-background cursor-not-allowed opacity-50" : ""}
+  `}
                   >
-                    <img
-                      src={image?.url || noImage}
-                      alt={image?.alt || "No image available"}
-                      className="w-full h-full object-cover"
-                    />
+                    {image ? (
+                      <img
+                        src={image.url}
+                        alt={image.alt || "Venue image"}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-background" />
+                    )}
                   </button>
                 );
               })}
             </div>
-            <div className="relative max-w-[1050px] w-full h-[650px] overflow-hidden rounded-[30px]">
+            <div className="relative max-w-[1050px] w-full xl:h-[650px] md:h-[500px] overflow-hidden rounded-[30px]">
               {/* Main image */}
               <img
                 src={validImages[selectedImage]?.url || noImage}
@@ -132,12 +136,13 @@ function VenueDashboardPage() {
               </button>
             </div>
           </div>
-          <div className="flex justify-between gap-10 mt-[35px]">
+
+          <div className="flex flex-col md:flex-row  justify-between gap-10 mt-[35px]">
             {/* Venue info */}
-            <section className="flex-1 min-w-0 pr-16">
+            <section className="flex-1 min-w-0 xl:pr-16">
               <div className="flex justify-between items-center">
-                <h1 className="text-3xl">{venue.name}</h1>
-                <div className="flex items-center self-start gap-1 text-brownDark pl-2">
+                <h1 className="sm:text-3xl text-2xl">{venue.name}</h1>
+                <div className="flex items-center self-start gap-1 text-brownDark sm:text-base text-sm pl-2">
                   <FontAwesomeIcon icon={faStar} size="lg" />
                   <span className="font-semibold text-xl">{venue.rating}</span>
                 </div>
@@ -219,6 +224,7 @@ function VenueDashboardPage() {
               </ul>
             </section>
 
+            {/* Manager dashboard */}
             <div>
               <div className="flex gap-3">
                 <Button className="w-full" onClick={() => setShowEdit(true)}>
@@ -235,7 +241,7 @@ function VenueDashboardPage() {
               <h2 className="font-body text-xl font-semibold mt-[30px] mb-[15px]">
                 Customer Bookings
               </h2>
-              <div className="bg-white shadow-lg rounded-[10px] h-[340px] p-[20px] w-[500px] flex flex-col">
+              <div className="bg-white shadow-lg rounded-[10px] h-[340px] p-[20px] w-[500px] max-[950px]:w-[350px] max-[950px]:text-sm max-[767px]:text-base max-[440px]:text-sm max-[767px]:w-full flex flex-col">
                 <div
                   className="
       grid
@@ -263,6 +269,7 @@ function VenueDashboardPage() {
                         className="
         grid
         grid-cols-[1.5fr_2fr_53px]
+        max-[850px]:grid-cols-[1.5fr_2fr_46px]
         items-center
         border-b
         border-brownLight
@@ -274,7 +281,7 @@ function VenueDashboardPage() {
                           {formatDate(new Date(booking.dateFrom))} -{" "}
                           {formatDate(new Date(booking.dateTo))}
                         </p>
-                        <p>{booking.guests}</p>
+                        <p className="text-right">{booking.guests}</p>
                       </div>
                     ))}
                   </div>
