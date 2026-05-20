@@ -21,20 +21,20 @@ function VenueCard({
   return (
     <Link
       to={to}
-      className=" bg-white shadow-lg rounded-[20px] max-w-[303px] w-full overflow-hidden min-h-[380px] flex flex-col transition-all duration-200 ease-out
+      className=" bg-white shadow-lg rounded-[20px] h-full w-full aspect-[3/4] overflow-hidden min-h-[380px] flex flex-col transition-all duration-200 ease-out
 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-2xl"
     >
       <div>
         <img
           src={image}
           alt={alt}
-          className="w-full aspect-[3/2] bg-brownLight object-cover w-full h-full"
+          className="aspect-[3/2] bg-brownLight object-cover w-full h-full"
         />
       </div>
       <div className="flex flex-col p-5 flex-1 justify-between">
         <div>
           <div className="flex justify-between">
-            <h2 className="text-lg min-[400px]:text-xl">{title}</h2>
+            <h2 className="min-[580px]:text-xl text-2xl">{title}</h2>
             <div className="flex items-center self-start gap-0.5 text-brownDark pl-2">
               <FontAwesomeIcon icon={faStar} />
               <span className="font-semibold">{rating}</span>

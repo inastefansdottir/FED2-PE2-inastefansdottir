@@ -271,7 +271,7 @@ function HomePage() {
         {isSearchLoading ? (
           <span className="loader my-12"></span>
         ) : (
-          <div className="grid xl:grid-cols-4 lg:grid-cols-3 min-[580px]:grid-cols-2 grid-cols-1 gap-[30px]">
+          <div className="grid xl:grid-cols-4 lg:grid-cols-3 min-[580px]:grid-cols-2 grid-cols-1 gap-[30px] max-w-[1300px] w-full">
             {filteredVenues.map((venue) => (
               <VenueCard
                 key={venue.id}

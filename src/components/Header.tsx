@@ -30,7 +30,7 @@ function Header() {
                   {user.venueManager ? (
                     <span>Manager</span>
                   ) : (
-                    <span>Customer</span>
+                    <span>Traveller</span>
                   )}
                 </div>
               </div>

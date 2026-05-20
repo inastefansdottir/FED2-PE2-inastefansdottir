@@ -106,7 +106,7 @@ function VenuePage() {
             <img
               src={validImages[selectedImage]?.url || noImage}
               alt={validImages[selectedImage]?.alt}
-              className="w-[1050px] h-full object-cover"
+              className="w-[1050px] h-full md:max-h-none aspect-[3/2] object-cover"
             />
 
             {/* Left arrow */}

@@ -110,7 +110,7 @@ function VenueDashboardPage() {
               <img
                 src={validImages[selectedImage]?.url || noImage}
                 alt={validImages[selectedImage]?.alt}
-                className="w-[1050px] h-full object-cover"
+                className="w-[1050px] h-full object-cover aspect-[3/2]"
               />
 
               {/* Left arrow */}
