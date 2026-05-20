@@ -70,11 +70,11 @@ function VenuePage() {
   }
 
   return (
-    <div className="px-10 mt-[50px] mb-[100px]">
+    <div className="md:px-10 px-5 md:mt-[50px] mt-[35px] mb-[100px]">
       <div className="max-w-[1300px] w-full">
-        <div className="flex gap-5">
+        <div className="flex md:flex-row flex-col gap-5">
           {/* Image slider */}
-          <div className="flex flex-col h-[650px] gap-5 w-[229px] shrink-0">
+          <div className="flex md:flex-col flex-row xl:h-[650px] h-[500px] md:gap-5 gap-2 xl:w-[229px] w-[180px] max-[767px]:w-full max-[767px]:h-full shrink-0 max-[767px]:order-2">
             {Array.from({ length: 4 }).map((_, index) => {
               const image = validImages[index];
 
@@ -84,20 +84,24 @@ function VenuePage() {
                   disabled={!image}
                   onClick={() => image && setSelectedImage(index)}
                   className={`
-        w-full h-[147px] rounded-[20px] overflow-hidden
-        ${!image ? "bg-background cursor-not-allowed opacity-50" : ""}
-      `}
+    w-full md:h-[147px] sm:h-[100px] h-[75px] sm:rounded-[20px] rounded-[15px] overflow-hidden
+    ${!image ? "bg-background cursor-not-allowed opacity-50" : ""}
+  `}
                 >
-                  <img
-                    src={image?.url || noImage}
-                    alt={image?.alt || "No image available"}
-                    className="w-full h-full object-cover"
-                  />
+                  {image ? (
+                    <img
+                      src={image.url}
+                      alt={image.alt || "Venue image"}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-background" />
+                  )}
                 </button>
               );
             })}
           </div>
-          <div className="relative max-w-[1050px] w-full h-[650px] overflow-hidden rounded-[30px]">
+          <div className="relative max-w-[1050px] w-full xl:h-[650px] md:h-[500px] overflow-hidden rounded-[30px]">
             {/* Main image */}
             <img
               src={validImages[selectedImage]?.url || noImage}
@@ -128,17 +132,18 @@ function VenuePage() {
             </button>
           </div>
         </div>
-        <div className="flex justify-between gap-10 mt-[35px]">
+
+        <div className="flex flex-col md:flex-row  justify-between gap-10 mt-[35px]">
           {/* Venue info */}
-          <section className="flex-1 min-w-0 pr-16">
+          <section className="flex-1 min-w-0 lg:pr-16">
             <div className="flex justify-between items-center">
-              <h1 className="text-3xl">{venue.name}</h1>
-              <div className="flex items-center self-start gap-1 text-brownDark pl-2">
+              <h1 className="sm:text-3xl text-2xl">{venue.name}</h1>
+              <div className="flex items-center self-start gap-1 text-brownDark sm:text-base text-sm pl-2">
                 <FontAwesomeIcon icon={faStar} size="lg" />
                 <span className="font-semibold text-xl">{venue.rating}</span>
               </div>
             </div>
-            <div className="flex items-center text-primary mt-1 gap-0.5">
+            <div className="flex items-center text-primary sm:text-base text-sm mt-1 gap-0.5">
               <FontAwesomeIcon icon={faLocationDot} />
               <p className="text-primary">
                 {venue.location.city}, {venue.location.country} •{" "}
@@ -215,7 +220,7 @@ function VenuePage() {
             </ul>
           </section>
           {/* Booking */}
-          <div className="bg-white shadow-lg rounded-[30px] h-fit p-[35px] w-[413px]">
+          <div className="bg-white shadow-lg rounded-[30px] h-fit p-[35px] max-[400px]:p-[20px] w-[413px] max-[850px]:w-[350px] max-[767px]:w-full">
             <Booking venue={venue} />
           </div>
         </div>
