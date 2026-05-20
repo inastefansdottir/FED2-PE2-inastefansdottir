@@ -163,11 +163,14 @@ function HomePage() {
       <img src={heroImage} className="w-full h-[500px] object-cover" />
 
       {/* Search */}
-      <div className="absolute left-1/2 -translate-x-1/2 top-[466px] px-10 max-w-[1000px] w-full">
-        <div className="p-2 bg-white rounded-full shadow-lg ">
-          <form onSubmit={handleSubmit} className="flex w-full justify-between">
+      <div className="absolute left-1/2 -translate-x-1/2 top-[466px] max-[720px]:top-[380px] px-5 sm:px-10 max-w-[1000px] w-full">
+        <div className="p-2 max-[720px]:p-5 bg-white rounded-full max-[720px]:rounded-[20px] shadow-lg ">
+          <form
+            onSubmit={handleSubmit}
+            className="flex max-[720px]:flex-col w-full justify-between"
+          >
             {/* Location */}
-            <div className="flex flex-col flex-1 justify-center px-5 min-w-0">
+            <div className="flex flex-col flex-1 justify-center px-5 max-[720px]:px-0 max-[720px]:pb-4 min-w-0 max-[720px]:border-b max-[720px]:border-accent">
               <label htmlFor="location" className="text-xs font-semibold">
                 Location:
               </label>
@@ -183,7 +186,7 @@ function HomePage() {
             </div>
 
             {/* Check-in and Check-out */}
-            <div className="relative flex flex-col justify-center flex-[1.5] px-5 border-l border-accent min-w-0">
+            <div className="relative flex flex-col justify-center flex-[1.5] px-5 max-[720px]:px-0 max-[720px]:py-4 border-l max-[720px]:border-l-0 max-[720px]:border-b border-accent min-w-0">
               <label className="text-xs font-semibold">
                 Check-in & Check-out dates:
               </label>
@@ -212,36 +215,59 @@ function HomePage() {
               </div>
             </div>
 
-            {/* Guests */}
-            <div className="flex flex-col justify-center flex-[0.8] px-5 border-l border-accent min-w-0">
-              <label htmlFor="guests" className="text-xs font-semibold">
-                Guests:
-              </label>
-              <input
-                id="guests"
-                name="guests"
-                type="number"
-                placeholder="Add guests"
-                value={guests}
-                onChange={(e) =>
-                  setGuests(e.target.value === "" ? "" : Number(e.target.value))
-                }
-                className="placeholder-primary pt-1"
-              />
-            </div>
+            {/* Guests + Submit wrapper */}
+            <div
+              className="
+    flex
+    items-center
+    flex-1
+    border-l
+    border-accent
+    max-[720px]:border-l-0
+    max-[720px]:pt-4
+    max-[720px]:justify-between
+    max-[720px]:gap-4
+  "
+            >
+              {/* Guests */}
+              <div className="flex flex-col justify-center px-5 max-[720px]:px-0 min-w-[130px]">
+                <label htmlFor="guests" className="text-xs font-semibold">
+                  Guests:
+                </label>
 
-            {/* Submit */}
-            <div className="self-end">
-              <Button type="submit" variant="secondary" size="big">
-                Search
-              </Button>
+                <input
+                  id="guests"
+                  name="guests"
+                  type="number"
+                  placeholder="Add guests"
+                  value={guests}
+                  onChange={(e) =>
+                    setGuests(
+                      e.target.value === "" ? "" : Number(e.target.value)
+                    )
+                  }
+                  className="placeholder-primary pt-1 w-full"
+                />
+              </div>
+
+              {/* Submit */}
+              <div>
+                <Button
+                  type="submit"
+                  variant="secondary"
+                  size="big"
+                  className="max-[720px]:px-10"
+                >
+                  Search
+                </Button>
+              </div>
             </div>
           </form>
         </div>
       </div>
 
       {/* Venue card grid */}
-      <div className="flex justify-center px-10 mt-[130px] mb-[85px]">
+      <div className="flex justify-center px-5 sm:px-10 mt-[130px] max-[720px]:mt-[200px] mb-[85px]">
         {isSearchLoading ? (
           <span className="loader"></span>
         ) : (
