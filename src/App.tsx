@@ -6,6 +6,7 @@ import RegisterPage from "./pages/RegisterPage";
 import ProfilePage from "./pages/ProfilePage";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import PublicRoute from "./routes/PublicRoute";
+import ScrollToTop from "./components/ScrollToTop";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
@@ -14,6 +15,8 @@ export default function App() {
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-1 flex justify-center items-center bg-background">
+        <ScrollToTop />
+
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/venue/:id" element={<VenuePage />} />

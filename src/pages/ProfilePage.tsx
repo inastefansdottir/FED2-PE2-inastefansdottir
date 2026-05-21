@@ -22,6 +22,9 @@ function ProfilePage() {
   const [myVenues, setMyVenues] = useState<Venue[]>([]);
   const [myBookings, setMyBookings] = useState<Booking[]>([]);
 
+  const [venuesLoading, setVenuesLoading] = useState(true);
+  const [bookingsLoading, setBookingsLoading] = useState(true);
+
   function logout() {
     logoutUser();
     navigate("/");
@@ -31,11 +34,15 @@ function ProfilePage() {
     if (!user?.name) return;
 
     try {
+      setVenuesLoading(true);
+
       const response = await getMyVenues(user.name);
+
       setMyVenues(response.data);
-      console.log(response.data);
     } catch (error) {
       console.error(error);
+    } finally {
+      setVenuesLoading(false);
     }
   }
 
@@ -56,11 +63,15 @@ function ProfilePage() {
       if (!user?.name) return;
 
       try {
+        setBookingsLoading(true);
+
         const response = await getProfileBookings(user.name);
+
         setMyBookings(response.data);
-        console.log(response.data);
       } catch (error) {
         console.error(error);
+      } finally {
+        setBookingsLoading(false);
       }
     }
 
@@ -168,7 +179,11 @@ function ProfilePage() {
 
                     {/* Venues*/}
                     <div className="bg-white rounded-2xl p-5 h-fit w-full">
-                      {myVenues.length === 0 ? (
+                      {venuesLoading ? (
+                        <div className="flex items-center justify-center min-h-[400px]">
+                          <span className="loader"></span>
+                        </div>
+                      ) : myVenues.length === 0 ? (
                         <div className="flex flex-col items-center justify-center gap-5 my-[50px]">
                           <p className="text-xl w-[250px] text-center">
                             You haven't created any venues yet
@@ -231,7 +246,11 @@ function ProfilePage() {
 
                     {/* Bookings */}
                     <div className="bg-white rounded-2xl h-[420px] max-[920px]:text-sm max-[400px]:text-xs p-5">
-                      {myBookings.length === 0 ? (
+                      {bookingsLoading ? (
+                        <div className="flex items-center justify-center min-h-[400px]">
+                          <span className="loader"></span>
+                        </div>
+                      ) : myBookings.length === 0 ? (
                         <div className="flex flex-col items-center justify-center h-full gap-5">
                           <p className="text-xl w-[250px] text-center">
                             You haven't made any bookings yet

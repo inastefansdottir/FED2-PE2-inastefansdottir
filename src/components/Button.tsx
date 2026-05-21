@@ -1,19 +1,13 @@
 import { Link } from "react-router-dom";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?:
-    | "primary"
-    | "smallPrimary"
-    | "secondary"
-    | "light"
-    | "error"
-    | "disabled";
+  variant?: "primary" | "smallPrimary" | "secondary" | "light" | "error";
   size?: "big" | "default" | "small";
   to?: string; // for links
 }
 
 const base =
-  "transition-colors font-body text-background font-semibold rounded-full";
+  "transition-colors font-body text-background font-semibold disabled:text-accent disabled:cursor-not-allowed disabled:hover:bg-primary rounded-full";
 
 const variants = {
   primary: "bg-primary hover:bg-secondary",
@@ -21,7 +15,6 @@ const variants = {
   secondary: "bg-secondary hover:bg-body",
   light: "bg-background text-secondary hover:bg-accent",
   error: "bg-error hover:bg-secondary",
-  disabled: "bg-primary text-accent",
 };
 
 const sizes = {

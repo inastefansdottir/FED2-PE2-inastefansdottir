@@ -8,12 +8,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "../components/Button";
 import VenueCard from "../components/VenueCard";
+import VenueCardSkeleton from "../components/VenueCardSkeleton";
 import type { VenueWithBookings } from "../types/venue";
+import { useAuth } from "../context/AuthContext";
 import heroImage from "../assets/hero-image.png";
 
 function HomePage() {
   const [venues, setVenues] = useState<VenueWithBookings[]>([]);
   const [page, setPage] = useState(1);
+
+  const { user } = useAuth();
 
   const [query, setQuery] = useState("");
   const [guests, setGuests] = useState<number | "">("");
@@ -34,12 +38,15 @@ function HomePage() {
   const [allVenuesLoaded, setAllVenuesLoaded] = useState(false);
 
   const [isSearchLoading, setIsSearchLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const calendarRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     async function fetchVenues() {
       try {
+        setLoading(true);
+
         const response = await getVenues(page, 40);
 
         setVenues((prev) => {
@@ -56,6 +63,8 @@ function HomePage() {
         }
       } catch (error) {
         console.error(error);
+      } finally {
+        setLoading(false);
       }
     }
 
@@ -268,24 +277,36 @@ function HomePage() {
 
       {/* Venue card grid */}
       <div className="flex justify-center px-5 md:px-10 mt-[130px] max-[720px]:mt-[200px] mb-[85px]">
-        {isSearchLoading ? (
-          <span className="loader my-12"></span>
+        {loading || isSearchLoading ? (
+          <div className="grid xl:grid-cols-4 lg:grid-cols-3 min-[580px]:grid-cols-2 grid-cols-1 gap-[30px] max-w-[1300px] w-full">
+            {[...Array(8)].map((_, i) => (
+              <VenueCardSkeleton key={i} />
+            ))}
+          </div>
         ) : (
           <div className="grid xl:grid-cols-4 lg:grid-cols-3 min-[580px]:grid-cols-2 grid-cols-1 gap-[30px] max-w-[1300px] w-full">
-            {filteredVenues.map((venue) => (
-              <VenueCard
-                key={venue.id}
-                to={`/venue/${venue.id}`}
-                image={venue.media?.[0]?.url}
-                alt={venue.media?.[0]?.alt ?? ""}
-                title={venue.name}
-                rating={venue.rating}
-                city={venue.location.city}
-                country={venue.location.country}
-                guests={venue.maxGuests}
-                price={venue.price}
-              />
-            ))}
+            {filteredVenues.map((venue) => {
+              const isOwner = venue.owner?.name === user?.name;
+
+              return (
+                <VenueCard
+                  key={venue.id}
+                  to={
+                    isOwner
+                      ? `/venue/dashboard/${venue.id}`
+                      : `/venue/${venue.id}`
+                  }
+                  image={venue.media?.[0]?.url}
+                  alt={venue.media?.[0]?.alt ?? ""}
+                  title={venue.name}
+                  rating={venue.rating}
+                  city={venue.location.city}
+                  country={venue.location.country}
+                  guests={venue.maxGuests}
+                  price={venue.price}
+                />
+              );
+            })}
           </div>
         )}
       </div>

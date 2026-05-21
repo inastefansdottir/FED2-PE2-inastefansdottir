@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { DayPicker } from "react-day-picker";
 import { useRef } from "react";
 import { createBooking } from "../api/bookings";
+import { useAuth } from "../context/AuthContext";
 import type { VenueWithBookings } from "../types/venue";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -19,6 +20,8 @@ function Booking({ venue }: { venue: VenueWithBookings }) {
   const [error, setError] = useState("");
 
   const [success, setSuccess] = useState(false);
+
+  const { user } = useAuth();
 
   const calendarRef = useRef<HTMLDivElement | null>(null);
 
@@ -83,6 +86,11 @@ function Booking({ venue }: { venue: VenueWithBookings }) {
       return;
     }
 
+    if (guests <= 0) {
+      setError("Please enter atleast 1 guest");
+      return;
+    }
+
     if (guests > venue.maxGuests) {
       setError(`Max ${venue.maxGuests} guests allowed`);
       return;
@@ -135,6 +143,7 @@ function Booking({ venue }: { venue: VenueWithBookings }) {
     <form
       onSubmit={handleBooking}
       className="flex flex-col text-secondary gap-4"
+      noValidate
     >
       {/* Price */}
       <p className="text-primary text-xl">
@@ -211,8 +220,8 @@ function Booking({ venue }: { venue: VenueWithBookings }) {
         </div>
       )}
 
-      <Button type="submit" className="mt-3 w-full" disabled={loading}>
-        {loading ? "Booking..." : "Book now"}
+      <Button className="mt-3 w-full" disabled={!user || loading} type="submit">
+        {!user ? "Login to book" : loading ? "Booking..." : "Book now"}
       </Button>
     </form>
   );

@@ -7,7 +7,7 @@ export function getVenues(
   limit = 10
 ): Promise<ApiResponse<VenueWithBookings[]>> {
   return apiRequest<ApiResponse<VenueWithBookings[]>>(
-    `/holidaze/venues?page=${page}&limit=${limit}&sort=created&sortOrder=desc&_bookings=true`
+    `/holidaze/venues?page=${page}&limit=${limit}&sort=created&sortOrder=desc&_bookings=true&_owner=true`
   );
 }
 
