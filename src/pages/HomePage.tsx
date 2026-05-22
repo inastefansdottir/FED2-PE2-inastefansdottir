@@ -1,11 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { DayPicker } from "react-day-picker";
 import type { DateRange } from "react-day-picker";
 import "react-day-picker/style.css";
 import { useRef } from "react";
 import { getVenues } from "../api/venues";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "../components/Button";
 import VenueCard from "../components/VenueCard";
 import VenueCardSkeleton from "../components/VenueCardSkeleton";
@@ -50,12 +48,13 @@ function HomePage() {
         const response = await getVenues(page, 40);
 
         setVenues((prev) => {
-          const combined = [...prev, ...response.data];
+          const map = new Map();
 
-          return combined.filter(
-            (venue, index, self) =>
-              index === self.findIndex((v) => v.id === venue.id)
-          );
+          [...prev, ...response.data].forEach((venue) => {
+            map.set(venue.id, venue);
+          });
+
+          return Array.from(map.values());
         });
 
         if (!response.meta.nextPage) {
@@ -96,55 +95,46 @@ function HomePage() {
     };
   }, []);
 
-  const filteredVenues = searchActive
-    ? venues.filter((venue) => {
-        const q = (filters.query || "").toLowerCase();
+  const filteredVenues = useMemo(() => {
+    if (!searchActive) return venues;
 
-        const location = venue.location;
+    const q = filters.query.toLowerCase();
 
-        const fullLocation = `
-  ${location?.address || ""}
-  ${location?.city || ""}
-  ${location?.zip || ""}
-  ${location?.country || ""}
-  ${location?.continent || ""}
-`.toLowerCase();
+    return venues.filter((venue) => {
+      const location = venue.location;
 
-        const matchesLocation = fullLocation.includes(q);
+      const fullLocation = `
+      ${location?.address || ""}
+      ${location?.city || ""}
+      ${location?.zip || ""}
+      ${location?.country || ""}
+      ${location?.continent || ""}
+    `.toLowerCase();
 
-        const matchesGuests =
-          typeof filters.guests === "number"
-            ? venue.maxGuests >= filters.guests
-            : true;
+      const matchesLocation = fullLocation.includes(q);
 
-        let matchesDates = true;
+      const matchesGuests =
+        typeof filters.guests === "number"
+          ? venue.maxGuests >= filters.guests
+          : true;
 
-        if (filters.range?.from && filters.range?.to && venue.bookings) {
-          const from = new Date(filters.range.from);
-          const to = new Date(filters.range.to);
+      let matchesDates = true;
 
-          matchesDates = !venue.bookings.some((b) => {
-            const bf = new Date(b.dateFrom);
-            const bt = new Date(b.dateTo);
+      if (filters.range?.from && filters.range?.to && venue.bookings) {
+        const from = new Date(filters.range.from);
+        const to = new Date(filters.range.to);
 
-            return from <= bt && to >= bf;
-          });
-        }
+        matchesDates = !venue.bookings.some((b) => {
+          const bf = new Date(b.dateFrom);
+          const bt = new Date(b.dateTo);
 
-        return matchesLocation && matchesGuests && matchesDates;
-      })
-    : venues;
+          return from <= bt && to >= bf;
+        });
+      }
 
-  useEffect(() => {
-    if (!searchActive) return;
-
-    if (!allVenuesLoaded) {
-      setIsSearchLoading(true);
-      setPage((prev) => prev + 1);
-    } else {
-      setIsSearchLoading(false);
-    }
-  }, [venues, searchActive, allVenuesLoaded]);
+      return matchesLocation && matchesGuests && matchesDates;
+    });
+  }, [venues, filters, searchActive]);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -159,12 +149,28 @@ function HomePage() {
     setAllVenuesLoaded(false);
     setVenues([]);
     setPage(1);
-    setIsSearchLoading(true); // 👈 important
+    setIsSearchLoading(true);
 
     setTimeout(() => {
       setSearchActive(true);
     }, 0);
   }
+
+  useEffect(() => {
+    if (!searchActive) return;
+
+    if (!allVenuesLoaded) {
+      setIsSearchLoading(true);
+
+      const timeout = setTimeout(() => {
+        setPage((prev) => prev + 1);
+      }, 0);
+
+      return () => clearTimeout(timeout);
+    } else {
+      setIsSearchLoading(false);
+    }
+  }, [venues, searchActive, allVenuesLoaded]);
 
   return (
     <div className="relative w-full flex flex-col self-start">
@@ -218,6 +224,7 @@ function HomePage() {
                       mode="range"
                       selected={range}
                       onSelect={setRange}
+                      disabled={{ before: new Date() }}
                     />
                   </div>
                 )}
@@ -312,16 +319,12 @@ function HomePage() {
       </div>
 
       {!searchActive && (
-        <button
+        <Button
           onClick={() => setPage((prev) => prev + 1)}
-          className="bg-primary rounded-full p-3 self-center hover:bg-secondary mb-[130px]"
+          className="self-center mb-[130px]"
         >
-          <FontAwesomeIcon
-            icon={faPlus}
-            size="xl"
-            className="text-background w-[1em]"
-          />
-        </button>
+          Load More
+        </Button>
       )}
     </div>
   );
