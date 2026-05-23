@@ -156,11 +156,14 @@ function Booking({ venue }: { venue: VenueWithBookings }) {
         ref={calendarRef}
         className="relative text-sm flex flex-col border border-secondary rounded-md p-3"
       >
-        <label htmlFor="date" className="font-semibold">
+        <div className="font-semibold" id="date-label">
           CHECK-IN & CHECK-OUT
-        </label>
+        </div>
 
         <div
+          role="button"
+          tabIndex={0}
+          aria-labelledby="date-label"
           onClick={() => setOpen((prev) => !prev)}
           className="pt-1 text-primary cursor-pointer"
         >
@@ -202,7 +205,7 @@ function Booking({ venue }: { venue: VenueWithBookings }) {
         />
       </div>
 
-      <p className="self-end text-primary">
+      <p className="self-end text-secondary">
         {venue.price} NOK x {nights} nights
       </p>
 
@@ -220,7 +223,12 @@ function Booking({ venue }: { venue: VenueWithBookings }) {
         </div>
       )}
 
-      <Button className="mt-3 w-full" disabled={!user || loading} type="submit">
+      <Button
+        variant="secondary"
+        className="mt-3 w-full"
+        disabled={!user || loading}
+        type="submit"
+      >
         {!user ? "Login to book" : loading ? "Booking..." : "Book now"}
       </Button>
     </form>

@@ -173,7 +173,7 @@ function ProfilePage() {
                 <div className="w-full flex justify-between items-center mb-7">
                   {/* Tabs */}
                   {user.venueManager ? (
-                    <div className="mt-6 flex gap-2">
+                    <div className="flex gap-2">
                       <button
                         onClick={() => setActiveTab("venues")}
                         className={`

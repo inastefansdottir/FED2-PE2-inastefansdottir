@@ -174,8 +174,14 @@ function HomePage() {
 
   return (
     <div className="relative w-full flex flex-col self-start">
+      <h1 className="hidden">Holidaze Home page</h1>
+
       {/* Hero image */}
-      <img src={heroImage} className="w-full h-[500px] object-cover" />
+      <img
+        src={heroImage}
+        alt="Hero image of a hotel bedroom"
+        className="w-full h-[500px] object-cover"
+      />
 
       {/* Search */}
       <div className="absolute left-1/2 -translate-x-1/2 top-[466px] max-[720px]:top-[380px] px-5 md:px-10 max-w-[1000px] w-full">
@@ -320,6 +326,7 @@ function HomePage() {
 
       {!searchActive && (
         <Button
+          variant="secondary"
           onClick={() => setPage((prev) => prev + 1)}
           className="self-center mb-[130px]"
         >

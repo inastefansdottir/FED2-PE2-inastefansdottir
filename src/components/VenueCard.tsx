@@ -37,10 +37,10 @@ hover:-translate-y-1 hover:scale-[1.02] hover:shadow-2xl"
             <h2 className="min-[580px]:text-xl text-2xl">{title}</h2>
             <div className="flex items-center self-start gap-0.5 text-brownDark pl-2">
               <FontAwesomeIcon icon={faStar} />
-              <span className="font-semibold">{rating}</span>
+              <span className="font-semibold text-secondary">{rating}</span>
             </div>
           </div>
-          <div className="flex items-center text-primary mt-1 gap-0.5">
+          <div className="flex items-center text-secondary mt-1 gap-0.5">
             <FontAwesomeIcon icon={faLocationDot} size="xs" />
             <p className="text-xs">
               {city}, {country}
@@ -50,10 +50,10 @@ hover:-translate-y-1 hover:scale-[1.02] hover:shadow-2xl"
         <div className="flex justify-between">
           <div className="flex items-center gap-0.5 text-primary">
             <FontAwesomeIcon icon={faUser} size="sm" />
-            <span>{guests}</span>
+            <span className="text-secondary font-semibold">{guests}</span>
           </div>
-          <p className="text-primary text-right">
-            <span className="font-semibold text-secondary">{price} NOK</span>
+          <p className="text-secondary text-right">
+            <span className="font-semibold">{price} NOK</span>
             /Night
           </p>
         </div>

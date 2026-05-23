@@ -125,7 +125,7 @@ function RegisterPage() {
           <div className="relative w-full h-[44px] shadow-lg rounded-full flex">
             {/* Sliding background */}
             <div
-              className={`absolute top-0 left-0 h-full w-1/2 rounded-full bg-accent/50 border border-primary transition-transform duration-300 ${
+              className={`absolute top-0 left-0 h-full w-1/2 rounded-full bg-accent/50 border border-secondary transition-transform duration-300 ${
                 accountType === "manager" ? "translate-x-full" : "translate-x-0"
               }`}
             />
@@ -134,7 +134,7 @@ function RegisterPage() {
             <button
               type="button"
               onClick={() => setAccountType("traveller")}
-              className="flex-1 z-10 relative h-full rounded-full text-primary"
+              className="flex-1 z-10 relative h-full rounded-full text-secondary"
             >
               Traveller
             </button>
@@ -142,7 +142,7 @@ function RegisterPage() {
             <button
               type="button"
               onClick={() => setAccountType("manager")}
-              className="flex-1 z-10 relative h-full rounded-full text-primary"
+              className="flex-1 z-10 relative h-full rounded-full text-secondary"
             >
               Manager
             </button>
@@ -250,7 +250,12 @@ function RegisterPage() {
           )}
 
           {/* SUBMIT */}
-          <Button type="submit" className="mt-4" disabled={loading}>
+          <Button
+            variant="secondary"
+            type="submit"
+            className="mt-4"
+            disabled={loading}
+          >
             {loading ? "Creating..." : "Create Account"}
           </Button>
         </form>

@@ -6,7 +6,7 @@ function Footer() {
     <footer className="flex justify-center bg-brownLight text-secondary md:px-10 px-5">
       <div className="flex flex-wrap justify-between max-[595px]:justify-start w-full max-w-[1300px] gap-x-16 gap-y-10 pt-9 pb-16">
         <div className="max-[700px]:hidden max-[595px]:block">
-          <img src={logoGreen} />
+          <img src={logoGreen} alt="Holidaze logo" />
           <p className="font-light">Find your next stay anywhere</p>
         </div>
 

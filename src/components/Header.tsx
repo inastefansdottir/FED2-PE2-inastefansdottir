@@ -81,6 +81,7 @@ function Header() {
 
                 <img
                   src={user.avatar?.url}
+                  alt="your profile picture"
                   className="rounded-full w-10 h-10 object-cover"
                 />
               </button>
@@ -96,10 +97,10 @@ function Header() {
                   </NavLink>
 
                   <Button
-                    variant="error"
+                    variant="light"
                     size="small"
                     onClick={handleLogout}
-                    className="w-[113px] hover:bg-background hover:text-secondary"
+                    className="w-[113px]"
                   >
                     Log out
                   </Button>

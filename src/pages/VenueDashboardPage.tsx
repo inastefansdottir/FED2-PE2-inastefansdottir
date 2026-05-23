@@ -86,6 +86,7 @@ function VenueDashboardPage() {
                   <button
                     key={index}
                     disabled={!image}
+                    aria-label={`Thumbnail ${index + 1}`}
                     onClick={() => image && setSelectedImage(index)}
                     className={`
     w-full md:h-[147px] sm:h-[100px] h-[75px] sm:rounded-[20px] rounded-[15px] overflow-hidden
@@ -120,6 +121,7 @@ function VenueDashboardPage() {
                     prev === 0 ? validImages.length - 1 : prev - 1
                   )
                 }
+                aria-label="Previous image"
                 className="absolute left-4 top-1/2 -translate-y-1/2 text-background"
               >
                 <FontAwesomeIcon icon={faChevronLeft} size="2xl" />
@@ -130,6 +132,7 @@ function VenueDashboardPage() {
                 onClick={() =>
                   setSelectedImage((prev) => (prev + 1) % validImages.length)
                 }
+                aria-label="Next image"
                 className="absolute right-4 top-1/2 -translate-y-1/2 text-background"
               >
                 <FontAwesomeIcon icon={faChevronRight} size="2xl" />
@@ -227,7 +230,11 @@ function VenueDashboardPage() {
             {/* Manager dashboard */}
             <div>
               <div className="flex gap-3">
-                <Button className="w-full" onClick={() => setShowEdit(true)}>
+                <Button
+                  variant="secondary"
+                  className="w-full"
+                  onClick={() => setShowEdit(true)}
+                >
                   Edit Venue
                 </Button>
                 <Button
@@ -250,7 +257,7 @@ function VenueDashboardPage() {
       border-b
       border-brownLight
       pb-3
-      text-brownDark
+      text-secondary
     "
                 >
                   <p>Venue</p>
