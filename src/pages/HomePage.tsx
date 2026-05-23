@@ -118,8 +118,11 @@ function HomePage() {
 
     const hasDateRange = !!(filters.range?.from && filters.range?.to);
 
-    const from = hasDateRange ? new Date(filters.range!.from).getTime() : 0;
-    const to = hasDateRange ? new Date(filters.range!.to).getTime() : 0;
+    const from = filters.range?.from
+      ? new Date(filters.range.from).getTime()
+      : 0;
+
+    const to = filters.range?.to ? new Date(filters.range.to).getTime() : 0;
 
     return venues.filter((venue) => {
       // LOCATION MATCH
