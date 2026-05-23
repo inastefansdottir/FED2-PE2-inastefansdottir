@@ -19,8 +19,9 @@ export default function EditVenueModal({ onClose, venue, onUpdated }: Props) {
   const [form, setForm] = useState({
     name: "",
     description: "",
-    price: 0,
-    maxGuests: 0,
+    price: "",
+    maxGuests: "",
+    rating: "",
     address: "",
     city: "",
     country: "",
@@ -39,10 +40,8 @@ export default function EditVenueModal({ onClose, venue, onUpdated }: Props) {
     description: "",
     price: "",
     maxGuests: "",
-    address: "",
     city: "",
     country: "",
-    zip: "",
     image: "",
   });
 
@@ -115,8 +114,9 @@ export default function EditVenueModal({ onClose, venue, onUpdated }: Props) {
     setForm({
       name: venue.name || "",
       description: venue.description || "",
-      price: venue.price || 0,
-      maxGuests: venue.maxGuests || 0,
+      price: venue.price?.toString() ?? "",
+      maxGuests: venue.maxGuests?.toString() ?? "",
+      rating: venue.rating?.toString() ?? "",
       address: venue.location?.address || "",
       city: venue.location?.city || "",
       country: venue.location?.country || "",
@@ -143,7 +143,7 @@ export default function EditVenueModal({ onClose, venue, onUpdated }: Props) {
 
     setForm((prev) => ({
       ...prev,
-      [name]: name === "price" || name === "maxGuests" ? Number(value) : value,
+      [name]: value,
     }));
 
     setFieldErrors((prev) => ({
@@ -154,10 +154,46 @@ export default function EditVenueModal({ onClose, venue, onUpdated }: Props) {
     setApiError("");
   }
 
+  function validate() {
+    const errors = {
+      name: "",
+      description: "",
+      price: "",
+      maxGuests: "",
+      city: "",
+      country: "",
+      image: "",
+    };
+
+    if (!form.name) errors.name = "Name is required";
+    if (!form.description) errors.description = "Description is required";
+
+    const hasImage = images.some((img) => img.trim() !== "");
+    if (!hasImage) {
+      errors.image = "You must add at least 1 image";
+    }
+
+    if (!form.price || Number(form.price) <= 0)
+      errors.price = "Price must be greater than 0";
+
+    if (!form.maxGuests || Number(form.maxGuests) <= 0)
+      errors.maxGuests = "Max guests is required";
+
+    if (!form.city) errors.city = "City is required";
+    if (!form.country) errors.country = "Country is required";
+
+    setFieldErrors(errors);
+
+    return !Object.values(errors).some((e) => e);
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
     setApiError("");
+
+    const isValid = validate();
+    if (!isValid) return;
 
     setLoading(true);
 
@@ -167,6 +203,7 @@ export default function EditVenueModal({ onClose, venue, onUpdated }: Props) {
         description: form.description,
         price: Number(form.price),
         maxGuests: Number(form.maxGuests),
+        rating: Number(form.rating),
 
         media: images.filter(Boolean).map((url) => ({
           url,
@@ -355,8 +392,15 @@ export default function EditVenueModal({ onClose, venue, onUpdated }: Props) {
 
           {/* Price */}
           <div className="flex gap-2">
-            <div className="flex flex-col gap-1">
-              <label htmlFor="price">Price per night:</label>
+            <div className="flex flex-col gap-1 max-[500px]:flex-1">
+              <label htmlFor="price">
+                <span className="max-[500px]:hidden">
+                  Price per night <span className="text-primary">*</span>
+                </span>
+                <span className="hidden max-[500px]:inline">
+                  Price <span className="text-primary">*</span>
+                </span>
+              </label>
 
               <input
                 id="price"
@@ -373,14 +417,38 @@ export default function EditVenueModal({ onClose, venue, onUpdated }: Props) {
             </div>
 
             {/* Max guests */}
-            <div className="flex flex-col gap-1">
-              <label htmlFor="maxGuests">Max guests:</label>
+            <div className="flex flex-col gap-1 max-[500px]:flex-[0.7]">
+              <label htmlFor="maxGuests">
+                <span className="max-[500px]:hidden">
+                  Max guests <span className="text-primary">*</span>
+                </span>
+                <span className="hidden max-[500px]:inline">
+                  Guests <span className="text-primary">*</span>
+                </span>
+              </label>
 
               <input
                 id="maxGuests"
                 name="maxGuests"
                 type="number"
                 value={form.maxGuests}
+                onChange={handleChange}
+                className="bg-white text-secondary border border-secondary rounded-full px-5 py-2.5 w-full max-w-[200px]"
+              />
+
+              <p className="text-error text-xs h-5 text-right">
+                {fieldErrors.maxGuests}
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-1 max-[500px]:flex-[0.7]">
+              <label htmlFor="rating">Rating</label>
+
+              <input
+                id="rating"
+                name="rating"
+                type="number"
+                value={form.rating}
                 onChange={handleChange}
                 className="bg-white text-secondary border border-secondary rounded-full px-5 py-2.5 w-full max-w-[200px]"
               />
@@ -464,10 +532,6 @@ export default function EditVenueModal({ onClose, venue, onUpdated }: Props) {
                   onChange={handleChange}
                   className="bg-white text-secondary border border-secondary rounded-full px-5 py-2.5 w-full"
                 />
-
-                <p className="text-error text-xs h-5 text-right">
-                  {fieldErrors.address}
-                </p>
               </div>
 
               {/* City */}
@@ -520,10 +584,6 @@ export default function EditVenueModal({ onClose, venue, onUpdated }: Props) {
                   onChange={handleChange}
                   className="bg-white text-secondary border border-secondary rounded-full px-5 py-2.5 w-full"
                 />
-
-                <p className="text-error text-xs h-5 text-right">
-                  {fieldErrors.zip}
-                </p>
               </div>
             </div>
           </div>

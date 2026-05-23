@@ -90,7 +90,7 @@ function Header() {
                   <NavLink
                     to="/profile"
                     onClick={() => setProfileMenuOpen(false)}
-                    className="px-5 py-2.5 text-sm transition-colors font-body text-background font-semibold rounded-full bg-primary hover:bg-secondary text-center"
+                    className="px-5 py-2.5 text-sm transition-colors font-body text-background font-semibold rounded-full bg-primary hover:bg-background hover:text-secondary text-center"
                   >
                     Profile
                   </NavLink>
@@ -99,7 +99,7 @@ function Header() {
                     variant="error"
                     size="small"
                     onClick={handleLogout}
-                    className="w-[113px]"
+                    className="w-[113px] hover:bg-background hover:text-secondary"
                   >
                     Log out
                   </Button>

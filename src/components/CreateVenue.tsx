@@ -19,6 +19,7 @@ export default function CreateVenueModal({ onClose, onSave }: Props) {
     description: "",
     price: 0,
     maxGuests: 0,
+    rating: 0,
     address: "",
     city: "",
     country: "",
@@ -38,10 +39,8 @@ export default function CreateVenueModal({ onClose, onSave }: Props) {
     description: "",
     price: "",
     maxGuests: "",
-    address: "",
     city: "",
     country: "",
-    zip: "",
     image: "",
   });
 
@@ -139,15 +138,18 @@ export default function CreateVenueModal({ onClose, onSave }: Props) {
       description: "",
       price: "",
       maxGuests: "",
-      address: "",
       city: "",
       country: "",
-      zip: "",
       image: "",
     };
 
     if (!form.name) errors.name = "Name is required";
     if (!form.description) errors.description = "Description is required";
+
+    const hasImage = images.some((img) => img.trim() !== "");
+    if (!hasImage) {
+      errors.image = "You must add at least 1 image";
+    }
 
     if (!form.price || Number(form.price) <= 0)
       errors.price = "Price must be greater than 0";
@@ -155,15 +157,8 @@ export default function CreateVenueModal({ onClose, onSave }: Props) {
     if (!form.maxGuests || Number(form.maxGuests) <= 0)
       errors.maxGuests = "Max guests is required";
 
-    if (!form.address) errors.address = "Address is required";
     if (!form.city) errors.city = "City is required";
     if (!form.country) errors.country = "Country is required";
-    if (!form.zip) errors.zip = "Zip code is required";
-
-    const hasImage = images.some((img) => img.trim() !== "");
-    if (!hasImage) {
-      errors.image = "You must add at least 1 image";
-    }
 
     setFieldErrors(errors);
 
@@ -186,6 +181,7 @@ export default function CreateVenueModal({ onClose, onSave }: Props) {
         description: form.description,
         price: Number(form.price),
         maxGuests: Number(form.maxGuests),
+        rating: Number(form.rating),
 
         media: images.filter(Boolean).map((url) => ({
           url,
@@ -260,7 +256,9 @@ export default function CreateVenueModal({ onClose, onSave }: Props) {
 
           {/* Name */}
           <div className="flex flex-col gap-1">
-            <label htmlFor="name">Name:</label>
+            <label htmlFor="name">
+              Name <span className="text-primary">*</span>
+            </label>
 
             <input
               id="name"
@@ -281,7 +279,9 @@ export default function CreateVenueModal({ onClose, onSave }: Props) {
 
           {/* Description */}
           <div className="flex flex-col gap-1">
-            <label htmlFor="description">Description:</label>
+            <label htmlFor="description">
+              Description <span className="text-primary">*</span>
+            </label>
 
             <textarea
               id="description"
@@ -348,7 +348,9 @@ export default function CreateVenueModal({ onClose, onSave }: Props) {
 
           {/* Image input */}
           <div className="flex flex-col gap-1">
-            <label htmlFor="image">Image URL:</label>
+            <label htmlFor="image">
+              Image URL <span className="text-primary">*</span>
+            </label>
 
             <div className="flex gap-2">
               <input
@@ -376,8 +378,15 @@ export default function CreateVenueModal({ onClose, onSave }: Props) {
 
           {/* Price */}
           <div className="flex gap-2">
-            <div className="flex flex-col gap-1">
-              <label htmlFor="price">Price per night:</label>
+            <div className="flex flex-col gap-1 max-[500px]:flex-1">
+              <label htmlFor="price">
+                <span className="max-[500px]:hidden">
+                  Price per night <span className="text-primary">*</span>
+                </span>
+                <span className="hidden max-[500px]:inline">
+                  Price <span className="text-primary">*</span>
+                </span>
+              </label>
 
               <input
                 id="price"
@@ -394,14 +403,38 @@ export default function CreateVenueModal({ onClose, onSave }: Props) {
             </div>
 
             {/* Max guests */}
-            <div className="flex flex-col gap-1">
-              <label htmlFor="maxGuests">Max guests:</label>
+            <div className="flex flex-col gap-1 max-[500px]:flex-[0.7]">
+              <label htmlFor="maxGuests">
+                <span className="max-[500px]:hidden">
+                  Max guests <span className="text-primary">*</span>
+                </span>
+                <span className="hidden max-[500px]:inline">
+                  Guests <span className="text-primary">*</span>
+                </span>
+              </label>
 
               <input
                 id="maxGuests"
                 name="maxGuests"
                 type="number"
                 value={form.maxGuests}
+                onChange={handleChange}
+                className="bg-white text-secondary border border-secondary rounded-full px-5 py-2.5 w-full max-w-[200px]"
+              />
+
+              <p className="text-error text-xs h-5 text-right">
+                {fieldErrors.maxGuests}
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-1 max-[500px]:flex-[0.7]">
+              <label htmlFor="rating">Rating</label>
+
+              <input
+                id="rating"
+                name="rating"
+                type="number"
+                value={form.rating}
                 onChange={handleChange}
                 className="bg-white text-secondary border border-secondary rounded-full px-5 py-2.5 w-full max-w-[200px]"
               />
@@ -475,7 +508,7 @@ export default function CreateVenueModal({ onClose, onSave }: Props) {
             <div className="flex gap-2 max-[450px]:flex-col">
               {/* Address */}
               <div className="flex flex-col gap-1 w-full">
-                <label htmlFor="address">Address:</label>
+                <label htmlFor="address">Address</label>
 
                 <input
                   id="address"
@@ -485,15 +518,13 @@ export default function CreateVenueModal({ onClose, onSave }: Props) {
                   onChange={handleChange}
                   className="bg-white text-secondary border border-secondary rounded-full px-5 py-2.5 w-full"
                 />
-
-                <p className="text-error text-xs h-5 text-right">
-                  {fieldErrors.address}
-                </p>
               </div>
 
               {/* City */}
               <div className="flex flex-col gap-1 w-full">
-                <label htmlFor="city">City:</label>
+                <label htmlFor="city">
+                  City <span className="text-primary">*</span>
+                </label>
 
                 <input
                   id="city"
@@ -513,7 +544,9 @@ export default function CreateVenueModal({ onClose, onSave }: Props) {
             <div className="flex gap-2">
               {/* Country */}
               <div className="flex flex-col flex-1 gap-1 w-full">
-                <label htmlFor="country">Country:</label>
+                <label htmlFor="country">
+                  Country <span className="text-primary">*</span>
+                </label>
 
                 <input
                   id="country"
@@ -531,7 +564,7 @@ export default function CreateVenueModal({ onClose, onSave }: Props) {
 
               {/* Zip code */}
               <div className="flex flex-col flex-[0.6] gap-1 w-full">
-                <label htmlFor="zip">Zip code:</label>
+                <label htmlFor="zip">Zip code</label>
 
                 <input
                   id="zip"
@@ -541,10 +574,6 @@ export default function CreateVenueModal({ onClose, onSave }: Props) {
                   onChange={handleChange}
                   className="bg-white text-secondary border border-secondary rounded-full px-5 py-2.5 w-full"
                 />
-
-                <p className="text-error text-xs h-5 text-right">
-                  {fieldErrors.zip}
-                </p>
               </div>
             </div>
           </div>

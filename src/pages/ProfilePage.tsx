@@ -6,11 +6,10 @@ import { getMyVenues, getProfileBookings } from "../api/profile";
 import { deleteBooking } from "../api/bookings";
 import type { Venue } from "../types/venue";
 import type { Booking } from "../types/booking";
-import VenueCard from "../components/VenueCard";
 import EditProfileModal from "../components/EditProfile";
 import CreateVenueModal from "../components/CreateVenue";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import VenuesPanel from "../components/profile/VenuesPanel";
+import BookingsPanel from "../components/profile/BookingsPanel";
 
 function ProfilePage() {
   const navigate = useNavigate();
@@ -25,19 +24,20 @@ function ProfilePage() {
   const [venuesLoading, setVenuesLoading] = useState(true);
   const [bookingsLoading, setBookingsLoading] = useState(true);
 
+  const [activeTab, setActiveTab] = useState<"venues" | "bookings">("venues");
+
   function logout() {
     logoutUser();
     navigate("/");
   }
 
   async function fetchVenues() {
-    if (!user?.name) return;
+    if (!user?.venueManager || !user?.name) return;
 
     try {
       setVenuesLoading(true);
 
       const response = await getMyVenues(user.name);
-
       setMyVenues(response.data);
     } catch (error) {
       console.error(error);
@@ -66,10 +66,7 @@ function ProfilePage() {
         setBookingsLoading(true);
 
         const response = await getProfileBookings(user.name);
-
         setMyBookings(response.data);
-      } catch (error) {
-        console.error(error);
       } finally {
         setBookingsLoading(false);
       }
@@ -120,220 +117,136 @@ function ProfilePage() {
                 src={user?.avatar?.url}
                 alt={user?.avatar?.alt}
                 className="
-    absolute
-    top-[225px]
-    left-0
-    w-[250px]
-    h-[250px]
-    object-cover
-    border-4
-    border-background
-    rounded-full
-
-    max-[700px]:left-1/2
-    max-[700px]:-translate-x-1/2
-  "
+                absolute
+                top-[225px]
+                left-0
+                w-[250px]
+                h-[250px]
+                object-cover
+                border-4
+                border-background
+                rounded-full
+                max-[700px]:left-1/2
+                max-[700px]:-translate-x-1/2
+              "
               />
             </div>
           </div>
 
+          {/* Main layout */}
           <div className="flex justify-center md:px-10 px-5">
             <div className="flex max-[700px]:flex-col max-[700px]:items-center max-[1050px]:gap-0 max-[700px]:gap-20 max-w-[1300px] w-full my-[100px]">
-              {user.venueManager ? (
-                <>
-                  {/* Profile details */}
-                  <div className="max-[700px]:text-center max-[700px]:mr-0 mr-10 mt-[75px]">
-                    <h1 className="text-xl mb-1">{user.name}</h1>
-                    <p className="text-brownDark mb-5">{user.email}</p>
-                    <p className="w-[250px] mb-3">
-                      {user.bio ? user.bio : "User doesn't have a bio yet"}
-                    </p>
-                    <p className="text-sm text-primary mb-5">
-                      Venue manager account
-                    </p>
-                    <div className="flex gap-2">
-                      <Button onClick={() => setShowEdit(true)} size="small">
-                        Edit Profile
-                      </Button>
-                      <Button
-                        variant="secondary"
-                        size="small"
-                        onClick={() => setShowCreateVenue(true)}
-                      >
-                        New Venue
-                      </Button>
-                    </div>
-                  </div>
+              {/* Profile info */}
+              <div className="max-[700px]:text-center mr-10 max-[700px]:mr-0 mt-[75px]">
+                <h1 className="text-xl mb-1">{user.name}</h1>
+                <p className="text-brownDark mb-5">{user.email}</p>
 
-                  {/* Display venues */}
-                  <div className="w-full">
-                    <div className="w-full flex justify-between items-end mb-7">
-                      <p className="font-semibold text-xl">
-                        Your Venues:{" "}
-                        <span className="text-primary">{myVenues.length}</span>
-                      </p>
-                      <Button onClick={logout} variant="error">
-                        Log out
-                      </Button>
-                    </div>
+                <p className="w-[250px] mb-3">
+                  {user.bio ? user.bio : "User doesn't have a bio yet"}
+                </p>
 
-                    {/* Venues*/}
-                    <div className="bg-white rounded-2xl p-5 h-fit w-full">
-                      {venuesLoading ? (
-                        <div className="flex items-center justify-center min-h-[400px]">
-                          <span className="loader"></span>
-                        </div>
-                      ) : myVenues.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center gap-5 my-[50px]">
-                          <p className="text-xl w-[250px] text-center">
-                            You haven't created any venues yet
-                          </p>
-                          <Button
-                            onClick={() => setShowCreateVenue(true)}
-                            variant="secondary"
-                          >
-                            Create Venue
-                          </Button>
-                        </div>
-                      ) : (
-                        <div className="grid xl:grid-cols-3 min-[900px]:grid-cols-2 grid-cols-1 gap-[25px]">
-                          {myVenues.map((venue) => (
-                            <VenueCard
-                              key={venue.id}
-                              to={`/venue/dashboard/${venue.id}`}
-                              image={venue.media?.[0]?.url}
-                              alt={venue.media?.[0]?.alt ?? ""}
-                              title={venue.name}
-                              rating={venue.rating}
-                              city={venue.location.city}
-                              country={venue.location.country}
-                              guests={venue.maxGuests}
-                              price={venue.price}
-                            />
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <>
-                  {/* Profile details */}
-                  <div className="max-[700px]:text-center max-[700px]:mr-0 mr-10 mt-[75px]">
-                    <h1 className="text-xl mb-1">{user.name}</h1>
-                    <p className="text-brownDark mb-5">{user.email}</p>
-                    <p className="w-[250px] mb-3">
-                      {user.bio ? user.bio : "User doesn't have a bio yet"}
-                    </p>
-                    <Button onClick={() => setShowEdit(true)} size="small">
-                      Edit Profile
+                {user.venueManager && (
+                  <p className="text-sm text-primary mb-5">
+                    Venue manager account
+                  </p>
+                )}
+
+                <div className="flex gap-2">
+                  <Button onClick={() => setShowEdit(true)} size="small">
+                    Edit Profile
+                  </Button>
+
+                  {user.venueManager && (
+                    <Button
+                      variant="secondary"
+                      size="small"
+                      onClick={() => setShowCreateVenue(true)}
+                    >
+                      New Venue
                     </Button>
-                  </div>
+                  )}
+                </div>
+              </div>
 
-                  {/* Display bookings */}
-                  <div className="w-full">
-                    <div className="w-full flex justify-between items-end mb-7">
-                      <p className="font-semibold text-xl">
-                        Your bookings:{" "}
-                        <span className="text-primary">
-                          {myBookings.length}
-                        </span>
-                      </p>
-                      <Button onClick={logout} variant="error">
-                        Log out
-                      </Button>
+              {/* Content box */}
+              <div className="w-full">
+                <div className="w-full flex justify-between items-center mb-7">
+                  {/* Tabs */}
+                  {user.venueManager ? (
+                    <div className="mt-6 flex gap-2">
+                      <button
+                        onClick={() => setActiveTab("venues")}
+                        className={`
+    text-sm px-4 py-2.5 rounded-full border transition
+    ${
+      activeTab === "venues"
+        ? "bg-accent/50 text-primary border-primary"
+        : "text-primary border-primary"
+    }
+  `}
+                      >
+                        Venues: {myVenues.length}
+                      </button>
+
+                      <button
+                        onClick={() => setActiveTab("bookings")}
+                        className={`
+    text-sm px-4 py-2.5 rounded-full border transition
+    ${
+      activeTab === "bookings"
+        ? "bg-brownLight/50 text-brownDark border-brownDark"
+        : "text-brownDark border-brownDark"
+    }
+  `}
+                      >
+                        Bookings: {myBookings.length}
+                      </button>
                     </div>
+                  ) : (
+                    <p className="font-semibold text-xl text-secondary">
+                      My Bookings:{" "}
+                      <span className="text-primary">{myBookings.length}</span>
+                    </p>
+                  )}
 
-                    {/* Bookings */}
-                    <div className="bg-white rounded-2xl h-[420px] max-[920px]:text-sm max-[400px]:text-xs p-5">
-                      {bookingsLoading ? (
-                        <div className="flex items-center justify-center min-h-[400px]">
-                          <span className="loader"></span>
-                        </div>
-                      ) : myBookings.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center h-full gap-5">
-                          <p className="text-xl w-[250px] text-center">
-                            You haven't made any bookings yet
-                          </p>
-                          <Button to="/" variant="secondary">
-                            Browse Venues
-                          </Button>
-                        </div>
-                      ) : (
-                        <div className="w-full">
-                          {/* Info */}
-                          <div
-                            className="
-      grid
-      grid-cols-[2fr_2fr_1fr_auto]
-      items-center
-      border-b
-      border-brownLight
-      pb-3
-      text-brownDark
-    "
-                          >
-                            <p>Venue</p>
-                            <p>Booked dates</p>
-                            <p>Guests</p>
-                            <p className="justify-self-end">Delete</p>
-                          </div>
-                          {myBookings.map((booking) => (
-                            <div
-                              key={booking.id}
-                              className="
-      grid
-      grid-cols-[2fr_2fr_1fr_auto]
-      items-center
-      border-b
-      border-brownLight
-      py-3
-    "
-                            >
-                              <p className="pr-3">{booking.venue?.name}</p>
+                  <Button size="small" onClick={logout} variant="error">
+                    Log out
+                  </Button>
+                </div>
 
-                              <p className="pr-3">
-                                {formatDate(new Date(booking.dateFrom))} -{" "}
-                                {formatDate(new Date(booking.dateTo))}
-                              </p>
-
-                              <p>{booking.guests}</p>
-
-                              <button
-                                onClick={() => handleDeleteBooking(booking.id)}
-                                className="
-    justify-self-end
-    flex
-    items-center
-    justify-center
-    py-2
-    px-1.5
-    rounded-full
-    bg-error/20
-    text-error
-    hover:bg-error
-    hover:text-background
-    transition
-    mx-3
-    max-[920px]:mx-2
-    max-[400px]:mx-1.5
-  "
-                              >
-                                <FontAwesomeIcon icon={faTrash} size="xs" />
-                              </button>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </>
-              )}
+                {/* WHITE BOX */}
+                <div className="bg-white rounded-2xl p-5 min-h-[420px]">
+                  {user.venueManager ? (
+                    activeTab === "venues" ? (
+                      <VenuesPanel
+                        venues={myVenues}
+                        loading={venuesLoading}
+                        onCreate={() => setShowCreateVenue(true)}
+                      />
+                    ) : (
+                      <BookingsPanel
+                        bookings={myBookings}
+                        loading={bookingsLoading}
+                        onDelete={handleDeleteBooking}
+                        formatDate={formatDate}
+                      />
+                    )
+                  ) : (
+                    <BookingsPanel
+                      bookings={myBookings}
+                      loading={bookingsLoading}
+                      onDelete={handleDeleteBooking}
+                      formatDate={formatDate}
+                    />
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
+      {/* Modals */}
       {showEdit && <EditProfileModal onClose={() => setShowEdit(false)} />}
 
       {showCreateVenue && (
