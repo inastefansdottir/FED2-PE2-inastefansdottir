@@ -14,6 +14,7 @@ import {
   faCircleXmark,
   faStar,
 } from "@fortawesome/free-solid-svg-icons";
+import SEO from "../components/SEO";
 
 function VenuePage() {
   const { id } = useParams();
@@ -70,165 +71,173 @@ function VenuePage() {
   }
 
   return (
-    <div className="md:px-10 px-5 md:mt-[50px] mt-[35px] mb-[100px]">
-      <div className="max-w-[1300px] w-full">
-        <div className="flex md:flex-row flex-col gap-5">
-          {/* Image slider */}
-          <div className="flex md:flex-col flex-row xl:h-[650px] h-[500px] md:gap-5 gap-2 xl:w-[229px] w-[180px] max-[767px]:w-full max-[767px]:h-full shrink-0 max-[767px]:order-2">
-            {Array.from({ length: 4 }).map((_, index) => {
-              const image = validImages[index];
+    <>
+      <SEO
+        title={venue ? `${venue.name} | Holidaze` : "Venue | Holidaze"}
+        description={venue?.description}
+        image={validImages[0]?.url}
+      />
 
-              return (
-                <button
-                  key={index}
-                  disabled={!image}
-                  aria-label={`Thumbnail ${index + 1}`}
-                  onClick={() => image && setSelectedImage(index)}
-                  className={`
+      <div className="md:px-10 px-5 md:mt-[50px] mt-[35px] mb-[100px]">
+        <div className="max-w-[1300px] w-full">
+          <div className="flex md:flex-row flex-col gap-5">
+            {/* Image slider */}
+            <div className="flex md:flex-col flex-row xl:h-[650px] h-[500px] md:gap-5 gap-2 xl:w-[229px] w-[180px] max-[767px]:w-full max-[767px]:h-full shrink-0 max-[767px]:order-2">
+              {Array.from({ length: 4 }).map((_, index) => {
+                const image = validImages[index];
+
+                return (
+                  <button
+                    key={index}
+                    disabled={!image}
+                    aria-label={`Thumbnail ${index + 1}`}
+                    onClick={() => image && setSelectedImage(index)}
+                    className={`
     w-full md:h-[147px] sm:h-[100px] h-[75px] sm:rounded-[20px] rounded-[15px] overflow-hidden
     ${!image ? "bg-background cursor-not-allowed opacity-50" : ""}
   `}
-                >
-                  {image ? (
-                    <img
-                      src={image.url}
-                      alt={image.alt || "Venue image"}
-                      className="w-full h-full object-cover"
+                  >
+                    {image ? (
+                      <img
+                        src={image.url}
+                        alt={image.alt || "Venue image"}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-background" />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+            <div className="relative max-w-[1050px] w-full xl:h-[650px] md:h-[500px] overflow-hidden rounded-[30px]">
+              {/* Main image */}
+              <img
+                src={validImages[selectedImage]?.url || noImage}
+                alt={validImages[selectedImage]?.alt}
+                className="w-[1050px] h-full md:max-h-none aspect-[3/2] object-cover"
+              />
+
+              {/* Left arrow */}
+              <button
+                onClick={() =>
+                  setSelectedImage((prev) =>
+                    prev === 0 ? validImages.length - 1 : prev - 1
+                  )
+                }
+                aria-label="Previous image"
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-background"
+              >
+                <FontAwesomeIcon icon={faChevronLeft} size="2xl" />
+              </button>
+
+              {/* Right arrow */}
+              <button
+                onClick={() =>
+                  setSelectedImage((prev) => (prev + 1) % validImages.length)
+                }
+                aria-label="Next image"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-background"
+              >
+                <FontAwesomeIcon icon={faChevronRight} size="2xl" />
+              </button>
+            </div>
+          </div>
+
+          <div className="flex flex-col md:flex-row  justify-between gap-10 mt-[35px]">
+            {/* Venue info */}
+            <section className="flex-1 min-w-0 lg:pr-16">
+              <div className="flex justify-between items-center">
+                <h1 className="sm:text-3xl text-2xl">{venue.name}</h1>
+                <div className="flex items-center self-start gap-1 text-brownDark sm:text-base text-sm pl-2">
+                  <FontAwesomeIcon icon={faStar} size="lg" />
+                  <span className="font-semibold text-xl">{venue.rating}</span>
+                </div>
+              </div>
+              <div className="flex items-center text-primary sm:text-base text-sm mt-1 gap-0.5">
+                <FontAwesomeIcon icon={faLocationDot} />
+                <p className="text-primary">
+                  {venue.location.city}, {venue.location.country} •{" "}
+                  {venue.maxGuests} Guests
+                </p>
+              </div>
+              <hr className="border-brownLight mt-4 w-full" />
+              <div className="my-[30px]">
+                <span className="font-semibold">Description</span>
+                <p className="max-w-[500px] mt-2 mb-6">{venue.description}</p>
+                <p className="secondary">
+                  <span className="font-semibold">Owner: </span>
+                  {venue.owner.name}
+                </p>
+                <hr className="border-brownLight mt-4" />
+              </div>
+              <ul className="grid gap-2 mt-[30px]">
+                <li className="flex items-center">
+                  {venue.meta.wifi ? (
+                    <FontAwesomeIcon
+                      icon={faCircleCheck}
+                      className="text-primary mr-2"
                     />
                   ) : (
-                    <div className="w-full h-full bg-background" />
+                    <FontAwesomeIcon
+                      icon={faCircleXmark}
+                      className="text-error mr-2"
+                    />
                   )}
-                </button>
-              );
-            })}
-          </div>
-          <div className="relative max-w-[1050px] w-full xl:h-[650px] md:h-[500px] overflow-hidden rounded-[30px]">
-            {/* Main image */}
-            <img
-              src={validImages[selectedImage]?.url || noImage}
-              alt={validImages[selectedImage]?.alt}
-              className="w-[1050px] h-full md:max-h-none aspect-[3/2] object-cover"
-            />
-
-            {/* Left arrow */}
-            <button
-              onClick={() =>
-                setSelectedImage((prev) =>
-                  prev === 0 ? validImages.length - 1 : prev - 1
-                )
-              }
-              aria-label="Previous image"
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-background"
-            >
-              <FontAwesomeIcon icon={faChevronLeft} size="2xl" />
-            </button>
-
-            {/* Right arrow */}
-            <button
-              onClick={() =>
-                setSelectedImage((prev) => (prev + 1) % validImages.length)
-              }
-              aria-label="Next image"
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-background"
-            >
-              <FontAwesomeIcon icon={faChevronRight} size="2xl" />
-            </button>
-          </div>
-        </div>
-
-        <div className="flex flex-col md:flex-row  justify-between gap-10 mt-[35px]">
-          {/* Venue info */}
-          <section className="flex-1 min-w-0 lg:pr-16">
-            <div className="flex justify-between items-center">
-              <h1 className="sm:text-3xl text-2xl">{venue.name}</h1>
-              <div className="flex items-center self-start gap-1 text-brownDark sm:text-base text-sm pl-2">
-                <FontAwesomeIcon icon={faStar} size="lg" />
-                <span className="font-semibold text-xl">{venue.rating}</span>
-              </div>
+                  <p>Wifi</p>
+                </li>
+                <li className="flex items-center">
+                  {venue.meta.parking ? (
+                    <FontAwesomeIcon
+                      icon={faCircleCheck}
+                      className="text-primary mr-2"
+                    />
+                  ) : (
+                    <FontAwesomeIcon
+                      icon={faCircleXmark}
+                      className="text-error mr-2"
+                    />
+                  )}
+                  <p>Parking</p>
+                </li>
+                <li className="flex items-center">
+                  {venue.meta.breakfast ? (
+                    <FontAwesomeIcon
+                      icon={faCircleCheck}
+                      className="text-primary mr-2"
+                    />
+                  ) : (
+                    <FontAwesomeIcon
+                      icon={faCircleXmark}
+                      className="text-error mr-2"
+                    />
+                  )}
+                  <p>Breakfast</p>
+                </li>
+                <li className="flex items-center">
+                  {venue.meta.pets ? (
+                    <FontAwesomeIcon
+                      icon={faCircleCheck}
+                      className="text-primary mr-2"
+                    />
+                  ) : (
+                    <FontAwesomeIcon
+                      icon={faCircleXmark}
+                      className="text-error mr-2"
+                    />
+                  )}
+                  <p>Pets</p>
+                </li>
+              </ul>
+            </section>
+            {/* Booking */}
+            <div className="bg-white shadow-lg rounded-[30px] h-fit p-[35px] max-[400px]:p-[20px] w-[413px] max-[850px]:w-[350px] max-[767px]:w-full">
+              <Booking venue={venue} />
             </div>
-            <div className="flex items-center text-primary sm:text-base text-sm mt-1 gap-0.5">
-              <FontAwesomeIcon icon={faLocationDot} />
-              <p className="text-primary">
-                {venue.location.city}, {venue.location.country} •{" "}
-                {venue.maxGuests} Guests
-              </p>
-            </div>
-            <hr className="border-brownLight mt-4 w-full" />
-            <div className="my-[30px]">
-              <span className="font-semibold">Description</span>
-              <p className="max-w-[500px] mt-2 mb-6">{venue.description}</p>
-              <p className="secondary">
-                <span className="font-semibold">Owner: </span>
-                {venue.owner.name}
-              </p>
-              <hr className="border-brownLight mt-4" />
-            </div>
-            <ul className="grid gap-2 mt-[30px]">
-              <li className="flex items-center">
-                {venue.meta.wifi ? (
-                  <FontAwesomeIcon
-                    icon={faCircleCheck}
-                    className="text-primary mr-2"
-                  />
-                ) : (
-                  <FontAwesomeIcon
-                    icon={faCircleXmark}
-                    className="text-error mr-2"
-                  />
-                )}
-                <p>Wifi</p>
-              </li>
-              <li className="flex items-center">
-                {venue.meta.parking ? (
-                  <FontAwesomeIcon
-                    icon={faCircleCheck}
-                    className="text-primary mr-2"
-                  />
-                ) : (
-                  <FontAwesomeIcon
-                    icon={faCircleXmark}
-                    className="text-error mr-2"
-                  />
-                )}
-                <p>Parking</p>
-              </li>
-              <li className="flex items-center">
-                {venue.meta.breakfast ? (
-                  <FontAwesomeIcon
-                    icon={faCircleCheck}
-                    className="text-primary mr-2"
-                  />
-                ) : (
-                  <FontAwesomeIcon
-                    icon={faCircleXmark}
-                    className="text-error mr-2"
-                  />
-                )}
-                <p>Breakfast</p>
-              </li>
-              <li className="flex items-center">
-                {venue.meta.pets ? (
-                  <FontAwesomeIcon
-                    icon={faCircleCheck}
-                    className="text-primary mr-2"
-                  />
-                ) : (
-                  <FontAwesomeIcon
-                    icon={faCircleXmark}
-                    className="text-error mr-2"
-                  />
-                )}
-                <p>Pets</p>
-              </li>
-            </ul>
-          </section>
-          {/* Booking */}
-          <div className="bg-white shadow-lg rounded-[30px] h-fit p-[35px] max-[400px]:p-[20px] w-[413px] max-[850px]:w-[350px] max-[767px]:w-full">
-            <Booking venue={venue} />
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

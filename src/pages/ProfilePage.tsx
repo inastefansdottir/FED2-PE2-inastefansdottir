@@ -10,6 +10,7 @@ import EditProfileModal from "../components/EditProfile";
 import CreateVenueModal from "../components/CreateVenue";
 import VenuesPanel from "../components/profile/VenuesPanel";
 import BookingsPanel from "../components/profile/BookingsPanel";
+import SEO from "../components/SEO";
 
 function ProfilePage() {
   const navigate = useNavigate();
@@ -101,6 +102,11 @@ function ProfilePage() {
 
   return (
     <>
+      <SEO
+        title={`${user?.name || "Profile"} | Holidaze`}
+        description="View and manage your bookings and venues."
+      />
+
       <div className="w-full self-start">
         <div className="relative">
           {/* Banner */}

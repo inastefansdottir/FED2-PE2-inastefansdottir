@@ -16,6 +16,7 @@ import {
   faCircleXmark,
   faStar,
 } from "@fortawesome/free-solid-svg-icons";
+import SEO from "../components/SEO";
 
 function VenueDashboardPage() {
   const { id } = useParams();
@@ -74,6 +75,18 @@ function VenueDashboardPage() {
 
   return (
     <>
+      <SEO
+        title={
+          venue
+            ? `${venue.name} | Dashboard | Holidaze`
+            : "Venue Dashboard | Holidaze"
+        }
+        description={`Manage bookings and settings for ${
+          venue?.name || "your venue"
+        }`}
+        image={validImages[0]?.url}
+      />
+
       <div className="md:px-10 px-5 md:mt-[50px] mt-[35px] mb-[100px]">
         <div className="max-w-[1300px] w-full">
           <div className="flex md:flex-row flex-col gap-5">

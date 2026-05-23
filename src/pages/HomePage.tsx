@@ -10,6 +10,7 @@ import VenueCardSkeleton from "../components/VenueCardSkeleton";
 import type { VenueWithBookings } from "../types/venue";
 import { useAuth } from "../context/AuthContext";
 import heroImage from "../assets/hero-image.png";
+import SEO from "../components/SEO";
 
 function HomePage() {
   const [venues, setVenues] = useState<VenueWithBookings[]>([]);
@@ -173,73 +174,82 @@ function HomePage() {
   }, [venues, searchActive, allVenuesLoaded]);
 
   return (
-    <div className="relative w-full flex flex-col self-start">
-      <h1 className="hidden">Holidaze Home page</h1>
-
-      {/* Hero image */}
-      <img
-        src={heroImage}
-        alt="Hero image of a hotel bedroom"
-        className="w-full h-[500px] object-cover"
+    <>
+      <SEO
+        title="Holidaze | Find and book amazing venues"
+        description="Browse and book unique venues for your next stay."
       />
 
-      {/* Search */}
-      <div className="absolute left-1/2 -translate-x-1/2 top-[466px] max-[720px]:top-[380px] px-5 md:px-10 max-w-[1000px] w-full">
-        <div className="p-2 max-[720px]:p-5 bg-white rounded-full max-[720px]:rounded-[20px] shadow-lg ">
-          <form
-            onSubmit={handleSubmit}
-            className="flex max-[720px]:flex-col w-full justify-between"
-          >
-            {/* Location */}
-            <div className="flex flex-col flex-1 justify-center px-5 max-[720px]:px-0 max-[720px]:pb-4 min-w-0 max-[720px]:border-b max-[720px]:border-accent">
-              <label htmlFor="location" className="text-xs font-semibold">
-                Location:
-              </label>
-              <input
-                id="location"
-                name="location"
-                type="text"
-                placeholder="Search location"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                className="placeholder-primary pt-1"
-              />
-            </div>
+      <div className="relative w-full flex flex-col self-start">
+        <h1 className="hidden">Holidaze Home page</h1>
 
-            {/* Check-in and Check-out */}
-            <div className="relative flex flex-col justify-center flex-[1.5] px-5 max-[720px]:px-0 max-[720px]:py-4 border-l max-[720px]:border-l-0 max-[720px]:border-b border-accent min-w-0">
-              <label className="text-xs font-semibold">
-                Check-in & Check-out dates:
-              </label>
+        {/* Hero image */}
+        <img
+          src={heroImage}
+          alt="Hero image of a hotel bedroom"
+          className="w-full h-[500px] object-cover"
+        />
 
-              <div ref={calendarRef} className="relative w-full max-w-[340px]">
-                {/* Fake input */}
-                <div
-                  onClick={() => setOpen((prev) => !prev)}
-                  className="pt-1 text-primary cursor-pointer"
-                >
-                  {range?.from && range?.to
-                    ? `${formatDate(range.from)} - ${formatDate(range.to)}`
-                    : "Add dates"}
-                </div>
-
-                {/* Calendar dropdown */}
-                {open && (
-                  <div className="absolute top-full mt-2 bg-white shadow-lg rounded-lg p-4 z-50 left-0">
-                    <DayPicker
-                      mode="range"
-                      selected={range}
-                      onSelect={setRange}
-                      disabled={{ before: new Date() }}
-                    />
-                  </div>
-                )}
+        {/* Search */}
+        <div className="absolute left-1/2 -translate-x-1/2 top-[466px] max-[720px]:top-[380px] px-5 md:px-10 max-w-[1000px] w-full">
+          <div className="p-2 max-[720px]:p-5 bg-white rounded-full max-[720px]:rounded-[20px] shadow-lg ">
+            <form
+              onSubmit={handleSubmit}
+              className="flex max-[720px]:flex-col w-full justify-between"
+            >
+              {/* Location */}
+              <div className="flex flex-col flex-1 justify-center px-5 max-[720px]:px-0 max-[720px]:pb-4 min-w-0 max-[720px]:border-b max-[720px]:border-accent">
+                <label htmlFor="location" className="text-xs font-semibold">
+                  Location:
+                </label>
+                <input
+                  id="location"
+                  name="location"
+                  type="text"
+                  placeholder="Search location"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  className="placeholder-primary pt-1"
+                />
               </div>
-            </div>
 
-            {/* Guests + Submit wrapper */}
-            <div
-              className="
+              {/* Check-in and Check-out */}
+              <div className="relative flex flex-col justify-center flex-[1.5] px-5 max-[720px]:px-0 max-[720px]:py-4 border-l max-[720px]:border-l-0 max-[720px]:border-b border-accent min-w-0">
+                <label className="text-xs font-semibold">
+                  Check-in & Check-out dates:
+                </label>
+
+                <div
+                  ref={calendarRef}
+                  className="relative w-full max-w-[340px]"
+                >
+                  {/* Fake input */}
+                  <div
+                    onClick={() => setOpen((prev) => !prev)}
+                    className="pt-1 text-primary cursor-pointer"
+                  >
+                    {range?.from && range?.to
+                      ? `${formatDate(range.from)} - ${formatDate(range.to)}`
+                      : "Add dates"}
+                  </div>
+
+                  {/* Calendar dropdown */}
+                  {open && (
+                    <div className="absolute top-full mt-2 bg-white shadow-lg rounded-lg p-4 z-50 left-0">
+                      <DayPicker
+                        mode="range"
+                        selected={range}
+                        onSelect={setRange}
+                        disabled={{ before: new Date() }}
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Guests + Submit wrapper */}
+              <div
+                className="
     flex
     items-center
     flex-1
@@ -250,90 +260,91 @@ function HomePage() {
     max-[720px]:justify-between
     max-[720px]:gap-4
   "
-            >
-              {/* Guests */}
-              <div className="flex flex-col justify-center px-5 max-[720px]:px-0 min-w-[150px] max-[720px]:min-w-0">
-                <label htmlFor="guests" className="text-xs font-semibold">
-                  Guests:
-                </label>
+              >
+                {/* Guests */}
+                <div className="flex flex-col justify-center px-5 max-[720px]:px-0 min-w-[150px] max-[720px]:min-w-0">
+                  <label htmlFor="guests" className="text-xs font-semibold">
+                    Guests:
+                  </label>
 
-                <input
-                  id="guests"
-                  name="guests"
-                  type="number"
-                  placeholder="Add guests"
-                  value={guests}
-                  onChange={(e) =>
-                    setGuests(
-                      e.target.value === "" ? "" : Number(e.target.value)
-                    )
-                  }
-                  className="placeholder-primary pt-1 w-full"
-                />
-              </div>
+                  <input
+                    id="guests"
+                    name="guests"
+                    type="number"
+                    placeholder="Add guests"
+                    value={guests}
+                    onChange={(e) =>
+                      setGuests(
+                        e.target.value === "" ? "" : Number(e.target.value)
+                      )
+                    }
+                    className="placeholder-primary pt-1 w-full"
+                  />
+                </div>
 
-              {/* Submit */}
-              <div>
-                <Button
-                  type="submit"
-                  variant="secondary"
-                  size="big"
-                  className="max-[720px]:px-10"
-                >
-                  Search
-                </Button>
+                {/* Submit */}
+                <div>
+                  <Button
+                    type="submit"
+                    variant="secondary"
+                    size="big"
+                    className="max-[720px]:px-10"
+                  >
+                    Search
+                  </Button>
+                </div>
               </div>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
-      </div>
 
-      {/* Venue card grid */}
-      <div className="flex justify-center px-5 md:px-10 mt-[130px] max-[720px]:mt-[200px] mb-[85px]">
-        {loading || isSearchLoading ? (
-          <div className="grid xl:grid-cols-4 lg:grid-cols-3 min-[580px]:grid-cols-2 grid-cols-1 gap-[30px] max-w-[1300px] w-full">
-            {[...Array(8)].map((_, i) => (
-              <VenueCardSkeleton key={i} />
-            ))}
-          </div>
-        ) : (
-          <div className="grid xl:grid-cols-4 lg:grid-cols-3 min-[580px]:grid-cols-2 grid-cols-1 gap-[30px] max-w-[1300px] w-full">
-            {filteredVenues.map((venue) => {
-              const isOwner = venue.owner?.name === user?.name;
+        {/* Venue card grid */}
+        <div className="flex justify-center px-5 md:px-10 mt-[130px] max-[720px]:mt-[200px] mb-[85px]">
+          {loading || isSearchLoading ? (
+            <div className="grid xl:grid-cols-4 lg:grid-cols-3 min-[580px]:grid-cols-2 grid-cols-1 gap-[30px] max-w-[1300px] w-full">
+              {[...Array(8)].map((_, i) => (
+                <VenueCardSkeleton key={i} />
+              ))}
+            </div>
+          ) : (
+            <div className="grid xl:grid-cols-4 lg:grid-cols-3 min-[580px]:grid-cols-2 grid-cols-1 gap-[30px] max-w-[1300px] w-full">
+              {filteredVenues.map((venue) => {
+                const isOwner = venue.owner?.name === user?.name;
 
-              return (
-                <VenueCard
-                  key={venue.id}
-                  to={
-                    isOwner
-                      ? `/venue/dashboard/${venue.id}`
-                      : `/venue/${venue.id}`
-                  }
-                  image={venue.media?.[0]?.url}
-                  alt={venue.media?.[0]?.alt ?? ""}
-                  title={venue.name}
-                  rating={venue.rating}
-                  city={venue.location.city}
-                  country={venue.location.country}
-                  guests={venue.maxGuests}
-                  price={venue.price}
-                />
-              );
-            })}
-          </div>
+                return (
+                  <VenueCard
+                    key={venue.id}
+                    to={
+                      isOwner
+                        ? `/venue/dashboard/${venue.id}`
+                        : `/venue/${venue.id}`
+                    }
+                    image={venue.media?.[0]?.url}
+                    alt={venue.media?.[0]?.alt ?? ""}
+                    title={venue.name}
+                    rating={venue.rating}
+                    city={venue.location.city}
+                    country={venue.location.country}
+                    guests={venue.maxGuests}
+                    price={venue.price}
+                  />
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        {!searchActive && (
+          <Button
+            variant="secondary"
+            onClick={() => setPage((prev) => prev + 1)}
+            className="self-center mb-[130px]"
+          >
+            Load More
+          </Button>
         )}
       </div>
-
-      {!searchActive && (
-        <Button
-          variant="secondary"
-          onClick={() => setPage((prev) => prev + 1)}
-          className="self-center mb-[130px]"
-        >
-          Load More
-        </Button>
-      )}
-    </div>
+    </>
   );
 }
 
