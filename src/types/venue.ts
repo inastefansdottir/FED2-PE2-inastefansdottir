@@ -43,6 +43,11 @@ export interface Venue {
 
 export interface VenueWithBookings extends Venue {
   bookings: Booking[];
+  _searchLocation?: string;
+  _bookings?: {
+    from: number;
+    to: number;
+  }[];
 }
 
 export interface CreateVenueData {

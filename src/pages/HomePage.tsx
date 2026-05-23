@@ -52,7 +52,22 @@ function HomePage() {
           const map = new Map();
 
           [...prev, ...response.data].forEach((venue) => {
-            map.set(venue.id, venue);
+            map.set(venue.id, {
+              ...venue,
+
+              _searchLocation: `
+        ${venue.location?.address || ""}
+        ${venue.location?.city || ""}
+        ${venue.location?.zip || ""}
+        ${venue.location?.country || ""}
+        ${venue.location?.continent || ""}
+      `.toLowerCase(),
+
+              _bookings: venue.bookings?.map((b) => ({
+                from: new Date(b.dateFrom).getTime(),
+                to: new Date(b.dateTo).getTime(),
+              })),
+            });
           });
 
           return Array.from(map.values());
@@ -101,35 +116,27 @@ function HomePage() {
 
     const q = filters.query.toLowerCase();
 
+    const hasDateRange = !!(filters.range?.from && filters.range?.to);
+
+    const from = hasDateRange ? new Date(filters.range!.from).getTime() : 0;
+    const to = hasDateRange ? new Date(filters.range!.to).getTime() : 0;
+
     return venues.filter((venue) => {
-      const location = venue.location;
+      // LOCATION MATCH
+      const matchesLocation = venue._searchLocation?.includes(q) ?? true;
 
-      const fullLocation = `
-      ${location?.address || ""}
-      ${location?.city || ""}
-      ${location?.zip || ""}
-      ${location?.country || ""}
-      ${location?.continent || ""}
-    `.toLowerCase();
-
-      const matchesLocation = fullLocation.includes(q);
-
+      // GUESTS
       const matchesGuests =
         typeof filters.guests === "number"
           ? venue.maxGuests >= filters.guests
           : true;
 
+      // DATES
       let matchesDates = true;
 
-      if (filters.range?.from && filters.range?.to && venue.bookings) {
-        const from = new Date(filters.range.from);
-        const to = new Date(filters.range.to);
-
-        matchesDates = !venue.bookings.some((b) => {
-          const bf = new Date(b.dateFrom);
-          const bt = new Date(b.dateTo);
-
-          return from <= bt && to >= bf;
+      if (hasDateRange && venue._bookings) {
+        matchesDates = !venue._bookings.some((b) => {
+          return from <= b.to && to >= b.from;
         });
       }
 
