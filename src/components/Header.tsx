@@ -17,6 +17,7 @@ function Header() {
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
 
   const mobileMenuRef = useRef<HTMLDivElement | null>(null);
+  const menuButtonRef = useRef<HTMLButtonElement | null>(null);
   const profileMenuRef = useRef<HTMLDivElement | null>(null);
 
   // Outside click
@@ -25,7 +26,9 @@ function Header() {
       // Mobile menu
       if (
         mobileMenuRef.current &&
-        !mobileMenuRef.current.contains(event.target as Node)
+        !mobileMenuRef.current.contains(event.target as Node) &&
+        menuButtonRef.current &&
+        !menuButtonRef.current.contains(event.target as Node)
       ) {
         setMenuOpen(false);
       }
@@ -55,7 +58,7 @@ function Header() {
 
   return (
     <>
-      <header className="relative flex justify-center bg-secondary w-full sticky top-0 px-4 md:px-10 z-30">
+      <header className="relative flex justify-center bg-secondary w-full sticky top-0 px-4 md:px-10 z-30 h-[60px]">
         <nav className="flex justify-between items-center w-full max-w-[1300px] py-2.5">
           <NavLink to={"/"}>
             <img src={logo} alt="Holidaze logo white" />
@@ -112,7 +115,7 @@ function Header() {
               {/* Desktop buttons */}
               <div className="hidden min-[450px]:flex gap-3 font-body font-semibold">
                 <Button to={"/register"} variant="smallPrimary" size="small">
-                  REGISTER
+                  Register
                 </Button>
 
                 <Button
@@ -120,17 +123,18 @@ function Header() {
                   variant="light"
                   size="small"
                 >
-                  LOGIN
+                  Login
                 </Button>
               </div>
 
               {/* Mobile hamburger */}
               <button
+                ref={menuButtonRef}
                 onClick={() => setMenuOpen((prev) => !prev)}
                 className="min-[450px]:hidden text-background text-2xl"
                 aria-label="Toggle menu"
               >
-                <FontAwesomeIcon icon={menuOpen ? faXmark : faBars} />
+                <FontAwesomeIcon size="lg" icon={menuOpen ? faXmark : faBars} />
               </button>
             </>
           )}
@@ -141,7 +145,7 @@ function Header() {
             className="min-[450px]:hidden absolute top-full mt-5 right-0 w-fit bg-secondary p-6 flex flex-col gap-3 shadow-lg rounded-2xl"
           >
             <Button to={"/register"} variant="smallPrimary" size="small">
-              REGISTER
+              Register
             </Button>
 
             <Button
@@ -152,7 +156,7 @@ function Header() {
               variant="light"
               size="small"
             >
-              LOGIN
+              Login
             </Button>
           </div>
         )}
