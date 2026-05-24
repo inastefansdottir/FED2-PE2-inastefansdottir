@@ -150,21 +150,40 @@ function HomePage() {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
+    const isEmptySearch =
+      query.trim() === "" && guests === "" && !range?.from && !range?.to;
+
+    // RESET TO DEFAULT PAGINATED STATE
+    if (isEmptySearch) {
+      setSearchActive(false);
+
+      setFilters({
+        query: "",
+        guests: "",
+        range: undefined,
+      });
+
+      setAllVenuesLoaded(false);
+      setVenues([]);
+      setPage(1);
+      setIsSearchLoading(false);
+
+      return;
+    }
+
+    // SEARCH MODE
     setFilters({
       query,
       guests,
       range,
     });
 
-    setSearchActive(false);
+    setSearchActive(true);
+
     setAllVenuesLoaded(false);
     setVenues([]);
     setPage(1);
     setIsSearchLoading(true);
-
-    setTimeout(() => {
-      setSearchActive(true);
-    }, 0);
   }
 
   useEffect(() => {
